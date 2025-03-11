@@ -1,8 +1,10 @@
 const express = require("express");
 const { update, destroy, show } = require("../controller/biereController");
 
-Router.get("/biere/:id_biere", get);
-Router.put("/biere/:id_biere", update)
-Router.delete("/biere/:id_biere", destroy)
+const router = express.Router();
 
-module.exports = Router;
+router.get("/biere/:id_biere", show);
+router.put("/biere/:id_biere", update);
+router.delete("/biere/:id_biere", destroy);
+
+module.exports = router;
