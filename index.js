@@ -1,12 +1,14 @@
 const express = require("express");
-
-// const biereRouter = require("./router/biereRouter");
+const model = require("./model/models");
+const { barRouter } = require("./router/routers");
 
 const app = express();
+require("dotenv").config();
+const PORT = process.env.SERVER_PORT || 3001;
 
 app.use(express.json());
-// app.use(biereRouter);
+app.use(barRouter);
 
-app.listen(3000, () => {
-    console.log("ça marche ou bien");
+app.listen(PORT, () => {
+    console.log(`ça marche ou bien ?! on port ${PORT}`);
 });

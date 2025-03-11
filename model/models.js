@@ -5,11 +5,16 @@ const Bar = require("./bars");
 const Biere = require("./biere");
 const Commande = require("./commande");
 
-Biere.hasMany(Commande, { through: "Biere_Comande" });
-Commande.hasMany(Biere, { through: "Biere_Comande" });
+// Many-to-many relationship between Biere and Commande
 
-Commande.belongsTo(Bar);
+Biere.belongsToMany(Commande, { through: "Biere_Commande" });
+Commande.belongsToMany(Biere, { through: "Biere_Commande" });
+
+// One-to-many relationships with Bar
 Bar.hasMany(Commande);
+Bar.hasMany(Biere);
+Commande.belongsTo(Bar);
+Biere.belongsTo(Bar);
 
 Biere.belongsTo(Bar)
 Bar.hasMany(Biere)
