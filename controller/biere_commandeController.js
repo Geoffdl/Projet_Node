@@ -15,17 +15,14 @@ const addBiereToCommande = async (req, res) => {
 };
 
 const removeBiereCommande = async (req, res) => {
-    const commandeId = parseInt(req.params.Commande.id_commande);
-    const biereId = parseInt(req.params.Biere.id_biere);
+    const commandeId = parseInt(req.params.id_commande);
+    const biereId = parseInt(req.params.id_biere);
 
     const [commande, biere] = await Promise.all([Commande.findByPk(commandeId), Biere.findByPk(biereId)]);
 
     if (!commande) return res.status(400).json({ message: "commande not found" });
     if (!biere) return res.status(400).json({ message: "biere not found" });
 
-    console.log(biere);
-    console.log(commandeId);
-    console.log(biereId);
     await commande.removeBiere(biere);
     res.json({ message: "Delete !" });
 };
