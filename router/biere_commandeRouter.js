@@ -8,9 +8,8 @@ BIERE_COMMANDE :
   POST /commandes/:id/biere/:id => Ajouter une bière à une commande
   DELETE /commandes/:id/biere/:id => Supprimer une bière d'une commande
 */
- router.post("/commandes/:id/biere/:id", addBiereToCommande)
- router.delete("/commandes/:id/biere/:id", removeBiereCommande)
-
+router.post("/commandes/:id_commande/biere/:id_biere", addBiereToCommande);
+router.delete("/commandes/:id_commande/biere/:id_biere", removeBiereCommande);
 
 /*
   AVANCÉ: 

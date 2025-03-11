@@ -1,4 +1,4 @@
-const { Commande, Bar } = require("../model/models");
+const { Commande } = require("../model/models");
 const sequelize = require("sequelize");
 
 const index = (req, res) => {
@@ -55,7 +55,7 @@ const store = (req, res) => {
 const update = (req, res) => {
     const commandeId = parseInt(req.params.id_commande);
     const { nom, prix, date, status } = req.body;
-    Commande.update({ nom, prix, date, status }, { where: { id } })
+    Commande.update({ nom, prix, date, status }, { where: { id: commandeId } })
         .then(() => Commande.findByPk(commandeId))
         .then((commande) => {
             if (!commande) {
@@ -69,13 +69,12 @@ const update = (req, res) => {
 const destroy = (req, res) => {
     const commandeId = parseInt(req.params.id_commande);
 
-    Commande.destroy({ where: { id } })
-        .then(() => Commande.findByPk(commandeId))
-        .then((commande) => {
-            if (!commande) {
+    Commande.destroy({ where: { id: commandeId } })
+        .then((deletedCount) => {
+            if (deletedCount === 0) {
                 return res.status(404).json({ message: "commande pas trouvée" });
             }
-            res.json(commande);
+            res.status(200).json({ message: "commande supprimée avec succès" });
         })
         .catch((error) => res.status(500).json(error));
 };
