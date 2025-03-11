@@ -11,4 +11,7 @@ Commande.hasMany(Biere, { through: "Biere_Comande" });
 Commande.belongsTo(Bar);
 Bar.hasMany(Commande);
 
+Biere.belongsTo(Bar)
+Bar.hasMany(Biere)
+
 module.exports = { Bar, Biere, Commande };
