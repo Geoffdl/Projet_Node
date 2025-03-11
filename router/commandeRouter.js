@@ -14,11 +14,11 @@ const { index, show, store, update, destroy } = require("../controller/commandeC
 
 const router = express.Router();
 
-router.get("/bars/:idBar/commandes", index);
+router.get("/bars/:id_bar/commandes", index);
 router.get("/commandes/:id", show);
 
-router.post("/bars/:idBar/commandes", store);
-router.put("/commandes/:commandeId", update);
-router.delete("/commandes/:commandeId", destroy);
+router.post("/bars/:id_bar/commandes", store);
+router.put("/commandes/:id_commande", update);
+router.delete("/commandes/:id_commande", destroy);
 
 module.exports = router;
