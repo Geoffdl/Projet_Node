@@ -1,5 +1,5 @@
 const sequelize = require("sequelize");
-const { Biere, Bar } = require("../model/models");
+const { Biere, Bar} = require("../model/models");
 
 const show = (req, res) => {
     const id = parseInt(req.params.id);
