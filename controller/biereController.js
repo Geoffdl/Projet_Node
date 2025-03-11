@@ -13,7 +13,7 @@ const update = (req, res) => {
     const id = parseInt(req.params.id);
     const { nom, degree, prix } = req.body;
 
-    Biere.create({ nom, degree, prix }, { where: { id } })
+    Biere.update({ nom, degree, prix }, { where: { id } })
         .then((biere) => res.status(201).json(biere))
         .catch((err) => res.status(500).json(err));
 };
@@ -21,31 +21,36 @@ const update = (req, res) => {
 const destroy = (req, res) => {
     const id = parseInt(req.params.id);
 
-    const biere = Biere.findByPk(id).catch((err) => res.status(500).json(err));
-
-    biere
-        .destroy()
-        .then((biere) => res.status(201).json(biere))
-        .catch((err) => res.status(500).json(err));
+    Biere.destroy({where: {id}})
+    .then((biere) => res.status(201).json(biere))
+    .catch((err) => res.status(500).json(err));
 };
 
 const addBiereBar = (req, res) => {
-    const barId = parseInt(req.params.barId);
-    const bar = Bar.findByPk(barId).catch((err) => res.status(500).json(err));
-
+    const barId = parseInt(req.params.id_bar);
     const { nom, degree, prix } = req.body;
-    Biere.create({ nom, degree, prix, bar })
-        .then((biere) => res.status(201).json(biere))
-        .catch((err) => res.status(500).json(err));
+
+    Biere.create({ 
+        nom, 
+        degree, 
+        prix,  
+        barId: barId })
+    .then((biere) => res.status(201).json(biere))
+    .catch((err) => res.status(500).json(err));
 };
 
 const getBiereBar = async (req, res) => {
-    const id = parseInt(req.params.id);
+    const barId = parseInt(req.params.id_bar);
 
-    const biere = await Biere.findByPk(id, { include: [Bar] });
-    if (!biere) return res.status(400).json({ message: "Biere not found !" });
-
-    res.json({ bar: biere.Bar });
+    Biere.findAll({
+        where : {barId : barId}
+    })
+    .then((commande) => {
+        res.json(commande);
+    })
+    .catch((error) => {
+        res.status(500).json({ error: "y'a pas de bières !" });
+    });
 };
 
 module.exports = { addBiereBar, getBiereBar, update, destroy, show };
