@@ -1,5 +1,6 @@
 const express = require("express");
 
+
 const { index, create, read, update, destroy } = require("../controller/barController");
 
 const router = express.Router();
@@ -11,3 +12,4 @@ router.put("/bars/:id_bar", update);
 router.delete("/bars/:id_bar", destroy);
 
 module.exports = router;
+
