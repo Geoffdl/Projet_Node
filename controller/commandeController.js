@@ -55,13 +55,21 @@ const store = (req, res) => {
 const update = (req, res) => {
     const commandeId = parseInt(req.params.id_commande);
     const { nom, prix, date, status } = req.body;
-    Commande.update({ nom, prix, date, status }, { where: { id: commandeId } })
-        .then(() => Commande.findByPk(commandeId))
+
+    Commande.findByPk(commandeId)
         .then((commande) => {
             if (!commande) {
                 return res.status(404).json({ message: "commande pas trouvée" });
             }
-            res.json(commande);
+            if (commande.status === "terminée") {
+                return res.status(400).json({ message: "La commande terminée ne peut pas être modifiée" });
+            }
+
+            return Commande.update({ nom, prix, date, status }, { where: { id: commandeId } })
+                .then(() => Commande.findByPk(commandeId))
+                .then((updatedCommande) => {
+                    res.json(updatedCommande);
+                });
         })
         .catch((error) => res.status(500).json(error));
 };
