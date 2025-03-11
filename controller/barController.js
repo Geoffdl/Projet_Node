@@ -58,7 +58,7 @@ const destroy = async (req, res) => {
             return res.status(404).json({ error: "Y a pas ce bar enfin" });
         }
 
-        await Bar.destroy(req.body, { where: { id: parseInt(id) } });
+        await Bar.destroy( { where: { id: parseInt(id) } });
         res.json({ message: "Bar supprimé ....", bar });
     } catch (error) {
         res.status(400).json({ error: "Suppression du bar à trop bu, pas marché" });

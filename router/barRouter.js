@@ -5,14 +5,14 @@ const { addBiereBar, getBiereBar } = require("../controller/biereController");
 
 const router = express.Router();
 
-router.get("/bars"), index;
-router.get("/bars/:id_bar"), read;
+router.get("/bars", index)
+router.get("/bars/:id", read)
 router.post("/bars", create);
-router.put("/bars/:id_bar", update);
-router.delete("/bars/:id_bar", destroy);
+router.put("/bars/:id", update);
+router.delete("/bars/:id", destroy);
 
-router.post("/bars/:id_bar/biere", addBiereBar);
-router.get("/bars/:id_bar/biere", getBiereBar);
+router.post("/bars/:id/biere", addBiereBar);
+router.get("/bars/:id/biere", getBiereBar);
 
 module.exports = router;
 
