@@ -6,7 +6,7 @@ const Commande = db.define("commandes", {
     nom: { type: sequelize.STRING },
     prix: { type: sequelize.FLOAT },
     date: { type: sequelize.DATE },
-    status: { type: sequelize.STRING },
+    status: { type: sequelize.ENUM("brouillon", "en cours", "terminée") },
 });
 
 module.exports = Commande;
