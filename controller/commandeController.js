@@ -1,4 +1,4 @@
-const { Commande } = require("../model/models");
+const { Commande, Bar } = require("../model/models");
 const sequelize = require("sequelize");
 
 const index = (req, res) => {
@@ -87,4 +87,46 @@ const destroy = (req, res) => {
         .catch((error) => res.status(500).json(error));
 };
 
-module.exports = { index, show, store, update, destroy };
+//"/bars/id_bar/commandes?date=2021-01-01"
+
+const getCommandeAtDate = async (req, res) => {
+    const barId = parseInt(req.params.id_bar);
+    const searchDate = req.query.date;
+    try {
+        const listAtDate = await Commande.findAll({
+            where: {
+                barId: barId,
+                date: searchDate,
+            },
+            attributes: ["id", "nom", "prix", "status"],
+        });
+        res.json(listAtDate);
+    } catch (error) {
+        res.status(500).json({ message: "ça marche po" });
+    }
+};
+
+//GET /bars/:id_bar/commandes?prix_min=10&prix_max=20 => Liste des commandes d'un bar avec un prix compris entre 10 et 20
+
+const getCommandeBetweenValue = async (req, res) => {
+    const barId = parseInt(req.params.id_bar);
+    const minPrice = parseFloat(req.query.prix_min);
+    const maxPrice = parseFloat(req.query.prix_max);
+
+    try {
+        const commandesBetweenPrice = await Commande.findAll({
+            where: {
+                barId: barId,
+                prix: {
+                    [Op.between]: [minPrice, maxPrice],
+                },
+            },
+            attributes: ["id", "nom", "prix", "status"],
+        });
+        res.json(commandesBetweenPrice);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la récupération des commandes" });
+    }
+};
+
+module.exports = { index, show, store, update, destroy, getCommandeAtDate, getCommandeBetweenValue };
