@@ -52,26 +52,45 @@ const store = (req, res) => {
         });
 };
 
-const update = (req, res) => {
+// const update = (req, res) => {
+//     const commandeId = parseInt(req.params.id_commande);
+//     const { nom, prix, date, status, barId } = req.body;
+
+//     Commande.findByPk(commandeId)
+//         .then((commande) => {
+//             if (!commande) {
+//                 return res.status(404).json({ message: "commande pas trouvée" });
+//             }
+//             if (commande.status === "terminée") {
+//                 return res.status(400).json({ message: "La commande terminée ne peut pas être modifiée" });
+//             }
+
+//             return Commande.update({ nom, prix, date, status, barId }, { where: { id: commandeId } })
+//                 .then(() => Commande.findByPk(commandeId))
+//                 .then((updatedCommande) => {
+//                     res.json(updatedCommande);
+//                 });
+//         })
+//         .catch((error) => res.status(500).json(error));
+// };
+
+const update = async (req, res) => {
     const commandeId = parseInt(req.params.id_commande);
     const { nom, prix, date, status, barId } = req.body;
+    try {
+        const commande = await Commande.findByPk(commandeId);
+        if (commande === null) {
+            return res.status(404).json({ message: "commande pas trouvée" });
+        }
+        if (commande.status === "terminée") {
+            return res.status(400).json({ message: "La commande terminée ne peut pas être modifiée" });
+        }
+        const updated = await commande.update({ nom, prix, date, status, barId });
 
-    Commande.findByPk(commandeId)
-        .then((commande) => {
-            if (!commande) {
-                return res.status(404).json({ message: "commande pas trouvée" });
-            }
-            if (commande.status === "terminée") {
-                return res.status(400).json({ message: "La commande terminée ne peut pas être modifiée" });
-            }
-
-            return Commande.update({ nom, prix, date, status, barId }, { where: { id: commandeId } })
-                .then(() => Commande.findByPk(commandeId))
-                .then((updatedCommande) => {
-                    res.json(updatedCommande);
-                });
-        })
-        .catch((error) => res.status(500).json(error));
+        res.json(updated);
+    } catch (error) {
+        res.status(500).json(error);
+    }
 };
 
 const destroy = (req, res) => {
