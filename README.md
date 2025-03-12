@@ -70,4 +70,4 @@ This project is licensed under the ISC License.
 
 ## Acknowledgments
 
-- Thanks to our instructors and peers for their support and guidance throughout this project.
+- Thanks to our instructor Allan Bernier (https://github.com/AllanBernier) and peers for their support and guidance throughout this project.
