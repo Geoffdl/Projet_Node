@@ -1,6 +1,6 @@
 const express = require("express");
 const model = require("./model/models");
-const { barRouter, biereRouter, commandeRouter, biere_commandeRouter, endpointAvance_2Router } = require("./router/routers");
+const { barRouter, biereRouter, commandeRouter, biere_commandeRouter, endpointAvance_1Router, endpointAvance_2Router } = require("./router/routers");
 
 const app = express();
 require("dotenv").config();
@@ -11,6 +11,7 @@ app.use(barRouter);
 app.use(biereRouter);
 app.use(commandeRouter);
 app.use(biere_commandeRouter);
+app.use(endpointAvance_1Router);
 app.use(endpointAvance_2Router);
 
 app.listen(PORT, () => {
