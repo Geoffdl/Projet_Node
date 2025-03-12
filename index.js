@@ -11,7 +11,6 @@ app.use(barRouter);
 app.use(biereRouter);
 app.use(commandeRouter);
 app.use(biere_commandeRouter);
-app.use(endpointAvance_1Router);
 app.use(endpointAvance_2Router);
 
 app.listen(PORT, () => {

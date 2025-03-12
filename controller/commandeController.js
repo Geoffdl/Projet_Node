@@ -1,17 +1,34 @@
 const { Commande, Bar } = require("../model/models");
 const sequelize = require("sequelize");
 
-const index = (req, res) => {
-    const barId = parseInt(req.params.id_bar);
-    Commande.findAll({
-        where: { barId: barId },
-    })
-        .then((commande) => {
-            res.json(commande);
-        })
-        .catch((error) => {
-            res.status(500).json({ error: "ça marche pas pour récuperer les commandes de ce bar" });
+const index = async (req, res) => {
+    const query = {}
+
+    if (req.query.date)
+        {query.date = req.query.date} 
+    if (req.query.status)
+        {query.status = req.query.status} 
+    if (req.query.name)
+        {query.name = req.query.name} 
+    if (req.query.prix_min && req.query.prix_max){
+        query.prix = {[Op.between]: [req.query.prix_min, req.query.prix_max]}
+    }
+
+    const barId = parseInt(req.params.id);
+    try {
+        const commandes = await Commande.findAll({
+            where: {
+                barId: barId,
+                ...query
+            },
+            limit: 10,
+            offset: 5,
+            attributes: ["id", "nom", "prix", "status"],
         });
+        res.json(commandes);
+    } catch (error) {
+        res.status(500).json({ message: "Il n'y a pas de commande"});
+    }
 };
 
 const show = (req, res) => {
@@ -84,42 +101,5 @@ const destroy = (req, res) => {
         .catch((error) => res.status(500).json(error));
 };
 
-const getCommandeAtDate = async (req, res) => {
-    const barId = parseInt(req.params.id_bar);
-    const searchDate = req.query.date;
-    try {
-        const listAtDate = await Commande.findAll({
-            where: {
-                barId: barId,
-                date: searchDate,
-            },
-            attributes: ["id", "nom", "prix", "status"],
-        });
-        res.json(listAtDate);
-    } catch (error) {
-        res.status(500).json({ message: "ça marche po" });
-    }
-};
 
-const getCommandeBetweenValue = async (req, res) => {
-    const barId = parseInt(req.params.id_bar);
-    const minPrice = parseFloat(req.query.prix_min);
-    const maxPrice = parseFloat(req.query.prix_max);
-
-    try {
-        const commandesBetweenPrice = await Commande.findAll({
-            where: {
-                barId: barId,
-                prix: {
-                    [Op.between]: [minPrice, maxPrice],
-                },
-            },
-            attributes: ["id", "nom", "prix", "status"],
-        });
-        res.json(commandesBetweenPrice);
-    } catch (error) {
-        res.status(500).json({ message: "Erreur lors de la récupération des commandes" });
-    }
-};
-
-module.exports = { index, show, store, update, destroy, getCommandeAtDate, getCommandeBetweenValue };
+module.exports = { index, show, store, update, destroy };

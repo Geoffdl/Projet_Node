@@ -54,15 +54,4 @@ const getBiereBar = async (req, res) => {
         });
 };
 
-const getAvgBiereBar = async (req, res) => {
-    try {
-        const result = await Biere.findAll({
-            attributes: [[sequelize.fn("AVG", sequelize.col("degre")), "Degre d'alcool moyen"]],
-        });
-        console.log(result);
-    } catch (error) {
-        console.error("Error fetching average:", error);
-    }
-};
-
-module.exports = { addBiereBar, getBiereBar, update, destroy, show, getAvgBiereBar };
+module.exports = { addBiereBar, getBiereBar, update, destroy, show };
