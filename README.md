@@ -61,8 +61,8 @@
 
 ## Contributors
 
-- **Geoffroy**
-- **Elisa**
+- **Geoffroy // https://github.com/Geoffdl **
+- **Elisa // https://github.com/Emikoya **
 
 ## License
 
