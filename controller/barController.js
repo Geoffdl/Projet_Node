@@ -83,4 +83,34 @@ const destroy = async (req, res) => {
     }
 };
 
-module.exports = { index, create, read, update, destroy };
+const getBarByDegree = async (req, res) => {
+    const query = {}
+    const include = [];
+    if(req.query.prix_min && req.query.prix_max){
+        query.prix = {[Op.between]: [req.query.prix_min, req.query.prix_max]}
+    }
+    else if (req.query.date) {
+        include.push({
+            model: Commande,
+            where: { date: req.query.date }
+        });
+    }
+
+    const barId = parseInt(req.params.id);
+    try {
+        const bieres = await Biere.findAll({
+            where: {
+                barId: barId,
+                ...query
+            },
+            include,
+            attributes: [[sequelize.fn("AVG", sequelize.col("degree")), "Degre d'alcool moyen"]],
+        });
+        res.json(bieres);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Il n'y a pas de bières" });
+    }
+};
+
+module.exports = { index, create, read, update, destroy, getBarByDegree };

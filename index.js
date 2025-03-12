@@ -1,6 +1,6 @@
 const express = require("express");
 const model = require("./model/models");
-const { barRouter, biereRouter, commandeRouter, biere_commandeRouter, endpointAvance_1Router } = require("./router/routers");
+const { barRouter, biereRouter, commandeRouter, biere_commandeRouter} = require("./router/routers");
 
 const app = express();
 require("dotenv").config();
@@ -11,7 +11,7 @@ app.use(barRouter);
 app.use(biereRouter);
 app.use(commandeRouter);
 app.use(biere_commandeRouter);
-app.use(endpointAvance_1Router);
+
 
 app.listen(PORT, () => {
     console.log(`ça marche ou bien ?! on port ${PORT}`);
