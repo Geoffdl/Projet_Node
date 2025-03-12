@@ -4,7 +4,7 @@ const { barRouter, biereRouter, commandeRouter, biere_commandeRouter, endpointAv
 
 const app = express();
 require("dotenv").config();
-const PORT = process.env.SERVER_PORT || 3001;
+const PORT = process.env.SERVER_PORT || 3000;
 
 app.use(express.json());
 app.use(barRouter);
@@ -16,3 +16,5 @@ app.use(endpointAvance_2Router);
 app.listen(PORT, () => {
     console.log(`ça marche ou bien ?! on port ${PORT}`);
 });
+
+module.exports = app;
