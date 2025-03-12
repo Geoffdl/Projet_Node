@@ -10,7 +10,7 @@ COMMANDE :
 */
 
 const express = require("express");
-const { index, show, store, update, destroy } = require("../controller/commandeController");
+const { index, show, store, update, destroy, getCommandeAtDate, getCommandeBetweenValue } = require("../controller/commandeController");
 const { validateCommande } = require("../middleware/formRequest/commande_formControl");
 
 const router = express.Router();

@@ -9,7 +9,15 @@
 */
 
 const express = require("express");
-const { index, show, store, update, destroy } = require("../controller/endpointAvance_2Controller");
+const {
+    listBiereByAlphabeticalOrderAsc,
+    listBiereByAlphabeticalOrderDesc,
+    listBiereByAlphabeticalOrderLimit10,
+    listBiereByAlphabeticalOrderLimitOffset,
+    listBiereByAlphabeticalOrderLimitOffsetSortDegre,
+    listBiereByAlphabeticalOrderLimitOffsetSortDegreSortPrice,
+    getCommandPDF,
+} = require("../controller/endpointAvance_2Controller");
 
 const router = express.Router();
 
