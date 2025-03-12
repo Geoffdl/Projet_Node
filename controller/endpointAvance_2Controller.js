@@ -49,13 +49,15 @@ const listBiereByAlphabeticalOrderLimit10 = async (req, res) => {
     const barId = parseInt(req.params.id_bar);
     const sortOrder = req.query.sort === "desc" ? "DESC" : "ASC";
 
+    const limit = parseInt(req.query.limit) || 10;
+
     try {
         const bieres = await Biere.findAll({
             where: {
                 barId: barId,
             },
             order: [["nom", sortOrder]],
-            limit: 10,
+            limit: limit,
             attributes: ["id", "nom", "prix", "degre"],
         });
         res.json(bieres);
@@ -67,14 +69,17 @@ const listBiereByAlphabeticalOrderLimitOffset = async (req, res) => {
     const barId = parseInt(req.params.id_bar);
     const sortOrder = req.query.sort === "desc" ? "DESC" : "ASC";
 
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = parseInt(req.query.offset) || 5;
+
     try {
         const bieres = await Biere.findAll({
             where: {
                 barId: barId,
             },
             order: [["nom", sortOrder]],
-            limit: 10,
-            offset: 5,
+            limit: limit,
+            offset: offset,
             attributes: ["id", "nom", "prix", "degre"],
         });
         res.json(bieres);
@@ -85,6 +90,9 @@ const listBiereByAlphabeticalOrderLimitOffset = async (req, res) => {
 const listBiereByAlphabeticalOrderLimitOffsetSortDegre = async (req, res) => {
     const barId = parseInt(req.params.id_bar);
     const sortOrder = req.query.sort === "desc" ? "DESC" : "ASC";
+
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = parseInt(req.query.limit) || 5;
 
     const minDegre = parseFloat(req.params.degree_min);
     const maxDegre = parseFloat(req.params.degree_max);
@@ -97,8 +105,8 @@ const listBiereByAlphabeticalOrderLimitOffsetSortDegre = async (req, res) => {
                 },
             },
             order: [["nom", sortOrder]],
-            limit: 10,
-            offset: 5,
+            limit: limit,
+            offset: offset,
             attributes: ["id", "nom", "prix", "degre"],
         });
         res.json(bieres);
@@ -109,6 +117,9 @@ const listBiereByAlphabeticalOrderLimitOffsetSortDegre = async (req, res) => {
 const listBiereByAlphabeticalOrderLimitOffsetSortDegreSortPrice = async (req, res) => {
     const barId = parseInt(req.params.id_bar);
     const sortOrder = req.query.sort === "desc" ? "DESC" : "ASC";
+
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = parseInt(req.query.limit) || 5;
 
     const minDegre = parseFloat(req.params.degree_min);
     const maxDegre = parseFloat(req.params.degree_max);
@@ -126,8 +137,8 @@ const listBiereByAlphabeticalOrderLimitOffsetSortDegreSortPrice = async (req, re
                 },
             },
             order: [["nom", sortOrder]],
-            limit: 10,
-            offset: 5,
+            limit: limit,
+            offset: offset,
             attributes: ["id", "nom", "prix", "degre"],
         });
         res.json(bieres);
