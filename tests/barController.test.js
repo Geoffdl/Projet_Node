@@ -2,12 +2,18 @@ const request = require(`supertest`);
 const app = require(`../index`);
 const db = require("../config/db");
 
-describe("Bar Controller", () => {
-    afterAll(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+beforeAll(async () => {
+    await db.sync({ force: true }); // recreate the database schema
+});
 
-        await db.close();
-    });
+//beforeEach
+//afterEach
+
+afterAll(async () => {
+    await db.close(); // Close the database connection
+});
+
+describe("Bar Controller", () => {
     it("should get all bars", async () => {
         const response = await request(app).get("/bars");
         expect(response.statusCode).toBe(200);
