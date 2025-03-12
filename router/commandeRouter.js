@@ -22,4 +22,7 @@ router.post("/bars/:id_bar/commandes", validateCommande, store);
 router.put("/commandes/:id_commande", validateCommande, update);
 router.delete("/commandes/:id_commande", destroy);
 
+router.get("/bars/id_bar/commandes?date=2021-01-01", getCommandeAtDate);
+router.get("/bars/id_bar/commandes?prix_min=10&prix_max=20", getCommandeBetweenValue);
+
 module.exports = router;
