@@ -13,12 +13,13 @@ const { Biere, Bar, Commande } = require("../model/models");
 
 const listBiereByAlphabeticalOrderAsc = async (req, res) => {
     const barId = parseInt(req.params.id_bar);
+    const sortOrder = req.query.sort === "desc" ? "DESC" : "ASC";
     try {
         const bieres = await Biere.findAll({
             where: {
                 barId: barId,
             },
-            order: [["nom", "ASC"]],
+            order: [["nom", sortOrder]],
             attributes: ["id", "nom", "prix", "degre"],
         });
         res.json(bieres);
@@ -29,12 +30,13 @@ const listBiereByAlphabeticalOrderAsc = async (req, res) => {
 
 const listBiereByAlphabeticalOrderDesc = async (req, res) => {
     const barId = parseInt(req.params.id_bar);
+    const sortOrder = req.query.sort === "desc" ? "DESC" : "ASC";
     try {
         const bieres = await Biere.findAll({
             where: {
                 barId: barId,
             },
-            order: [["nom", "DESC"]],
+            order: [["nom", sortOrder]],
             attributes: ["id", "nom", "prix", "degre"],
         });
         res.json(bieres);
@@ -43,10 +45,96 @@ const listBiereByAlphabeticalOrderDesc = async (req, res) => {
     }
 };
 
-const listBiereByAlphabeticalOrderLimit10 = async (req, res) => {};
-const listBiereByAlphabeticalOrderLimitOffset = async (req, res) => {};
-const listBiereByAlphabeticalOrderLimitOffsetSortDegre = async (req, res) => {};
-const listBiereByAlphabeticalOrderLimitOffsetSortDegreSortPrice = async (req, res) => {};
+const listBiereByAlphabeticalOrderLimit10 = async (req, res) => {
+    const barId = parseInt(req.params.id_bar);
+    const sortOrder = req.query.sort === "desc" ? "DESC" : "ASC";
+
+    try {
+        const bieres = await Biere.findAll({
+            where: {
+                barId: barId,
+            },
+            order: [["nom", sortOrder]],
+            limit: 10,
+            attributes: ["id", "nom", "prix", "degre"],
+        });
+        res.json(bieres);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la récupération des bières" });
+    }
+};
+const listBiereByAlphabeticalOrderLimitOffset = async (req, res) => {
+    const barId = parseInt(req.params.id_bar);
+    const sortOrder = req.query.sort === "desc" ? "DESC" : "ASC";
+
+    try {
+        const bieres = await Biere.findAll({
+            where: {
+                barId: barId,
+            },
+            order: [["nom", sortOrder]],
+            limit: 10,
+            offset: 5,
+            attributes: ["id", "nom", "prix", "degre"],
+        });
+        res.json(bieres);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la récupération des bières" });
+    }
+};
+const listBiereByAlphabeticalOrderLimitOffsetSortDegre = async (req, res) => {
+    const barId = parseInt(req.params.id_bar);
+    const sortOrder = req.query.sort === "desc" ? "DESC" : "ASC";
+
+    const minDegre = parseFloat(req.params.degree_min);
+    const maxDegre = parseFloat(req.params.degree_max);
+    try {
+        const bieres = await Biere.findAll({
+            where: {
+                barId: barId,
+                degree: {
+                    [Op.between]: [minDegre, maxDegre],
+                },
+            },
+            order: [["nom", sortOrder]],
+            limit: 10,
+            offset: 5,
+            attributes: ["id", "nom", "prix", "degre"],
+        });
+        res.json(bieres);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la récupération des bières" });
+    }
+};
+const listBiereByAlphabeticalOrderLimitOffsetSortDegreSortPrice = async (req, res) => {
+    const barId = parseInt(req.params.id_bar);
+    const sortOrder = req.query.sort === "desc" ? "DESC" : "ASC";
+
+    const minDegre = parseFloat(req.params.degree_min);
+    const maxDegre = parseFloat(req.params.degree_max);
+    const minPrix = parseFloat(req.params.prix_min);
+    const maxPrix = parseFloat(req.params.prix_max);
+    try {
+        const bieres = await Biere.findAll({
+            where: {
+                barId: barId,
+                degree: {
+                    [Op.between]: [minDegre, maxDegre],
+                },
+                prix: {
+                    [Op.between]: [minPrix, maxPrix],
+                },
+            },
+            order: [["nom", sortOrder]],
+            limit: 10,
+            offset: 5,
+            attributes: ["id", "nom", "prix", "degre"],
+        });
+        res.json(bieres);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la récupération des bières" });
+    }
+};
 const getCommandPDF = async (req, res) => {};
 
 module.exports = {
