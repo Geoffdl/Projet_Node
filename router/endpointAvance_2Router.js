@@ -9,27 +9,12 @@
 */
 
 const express = require("express");
-const {
-    listBiereByAlphabeticalOrderAsc,
-    listBiereByAlphabeticalOrderDesc,
-    listBiereByAlphabeticalOrderLimit10,
-    listBiereByAlphabeticalOrderLimitOffset,
-    listBiereByAlphabeticalOrderLimitOffsetSortDegre,
-    listBiereByAlphabeticalOrderLimitOffsetSortDegreSortPrice,
-    getCommandPDF,
-} = require("../controller/endpointAvance_2Controller");
+const { listBiere, getCommandPDF } = require("../controller/endpointAvance_2Controller");
 
 const router = express.Router();
 
-router.get("/bars/:id_bar/biere?sort=asc", listBiereByAlphabeticalOrderAsc);
-router.get("/bars/:id_bar/biere?sort=desc", listBiereByAlphabeticalOrderDesc);
-router.get("/bars/:id_bar/biere?sort=asc&limit=10", listBiereByAlphabeticalOrderLimit10);
-router.get("/bars/:id_bar/biere?sort=asc&limit=10&offset=5", listBiereByAlphabeticalOrderLimitOffset);
-router.get("/bars/:id_bar/biere?sort=asc&limit=10&offset=5&degree_min=5&degree_max=10", listBiereByAlphabeticalOrderLimitOffsetSortDegre);
-router.get(
-    "/bars/:id_bar/biere?sort=asc&limit=10&offset=5&degree_min=5&degree_max=10&prix_min=10&prix_max=20",
-    listBiereByAlphabeticalOrderLimitOffsetSortDegreSortPrice
-);
+router.get("/bars/:id_bar/biere", listBiere);
+
 router.get("/commande/details/:id_commande", getCommandPDF);
 
 module.exports = router;

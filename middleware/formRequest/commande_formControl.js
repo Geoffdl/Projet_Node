@@ -29,9 +29,51 @@ const validateCommande = [
 
     (req, res, next) => {
         const errors = validationResult(req);
-        if (errors) return res.status(400).json({ errors });
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         next();
     },
 ];
 
-module.exports = { validateCommande };
+const updateCommande = [
+    body("nom").optional().isString().withMessage("Le nom doit etre un string").trim(),
+
+    body("prix").optional().isFloat({ gt: 0 }).withMessage("Le prix doit floaté positif").trim(),
+
+    body("date")
+        .optional()
+        .isDate()
+
+        .custom((value) => {
+            const inputDate = new Date(value);
+            const currentDate = new Date();
+            if (inputDate > currentDate) {
+                throw new Error("La date ne peut pas etre dans le futur");
+            }
+            return true;
+        })
+        .trim(),
+
+    body("status")
+        .optional()
+        .isString()
+
+        .isIn(["brouillon", "en cours", "terminée"])
+        .withMessage("Le status doit être 'brouillon', 'en cours', ou 'terminée'")
+        .trim(),
+
+    body("barId").optional().isNumeric({ gt: 0 }).trim(),
+
+    (req, res, next) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        next();
+    },
+];
+
+module.exports = { validateCommande, updateCommande };

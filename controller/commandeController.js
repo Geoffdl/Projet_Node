@@ -54,7 +54,7 @@ const store = (req, res) => {
 
 const update = (req, res) => {
     const commandeId = parseInt(req.params.id_commande);
-    const { nom, prix, date, status } = req.body;
+    const { nom, prix, date, status, barId } = req.body;
 
     Commande.findByPk(commandeId)
         .then((commande) => {
@@ -65,7 +65,7 @@ const update = (req, res) => {
                 return res.status(400).json({ message: "La commande terminée ne peut pas être modifiée" });
             }
 
-            return Commande.update({ nom, prix, date, status }, { where: { id: commandeId } })
+            return Commande.update({ nom, prix, date, status, barId }, { where: { id: commandeId } })
                 .then(() => Commande.findByPk(commandeId))
                 .then((updatedCommande) => {
                     res.json(updatedCommande);

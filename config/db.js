@@ -9,7 +9,7 @@ const STORAGE =
 const db = new Sequelize({
     dialect: DIALECT,
     storage: STORAGE,
-    logging: false, // disable logging for tests
+    // logging: false, // disable logging for tests
 });
 
 db.sync();
