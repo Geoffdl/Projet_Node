@@ -1,3 +1,4 @@
+const { query } = require("express");
 const { Bar } = require("../model/models");
 
 const index = (req, res) => {
@@ -65,4 +66,42 @@ const destroy = async (req, res) => {
     }
 };
 
-module.exports = { index, create, read, update, destroy };
+//Liste des bars d'une ville donnée
+const getVille = async (req, res) => {
+    const ville = req.query.ville
+
+    try{
+        const bars = await Bar.findAll({
+            where: {
+                adresse: {
+                    [db.sequelize.Op.like]: `%${ville}%`
+                }
+            }
+        })
+        res.json(bars);
+    } catch (error){
+        res.status(400).json({error:"Y'a pas de cette ville là ici"});
+    }
+
+}
+
+//Liste des bars d'un nom donné
+const getName = async (req, res) => {
+    const name = req.query.name
+
+    try{
+        const bars = await Bar.findAll({
+            where: {
+                nom: {
+                    [db.sequelize.Op.like]: `%${name}%`
+                }
+            }
+        })
+        res.json(name);
+    } catch (error){
+        res.status(400).json({error:"Y'a pas de ce nom là ici"});
+    }
+
+}
+
+module.exports = { index, create, read, update, destroy, getVille, getName };
