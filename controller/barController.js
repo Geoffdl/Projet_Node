@@ -1,14 +1,24 @@
 const { query } = require("express");
+const { Op } = require("sequelize");
 const { Bar } = require("../model/models");
 
 const index = async (req, res) => {
+    const query = {}
+  
+    if (req.query.ville) {
+      query.adresse = { [Op.like]: `%${req.query.ville}%` }
+    } else if (req.query.name) {
+      query.nom = { [Op.like]: `%${req.query.name}%` }
+    }
+  
     try {
-        const bars = await Bar.findAll();
-        res.json(bars);
+      const bars = await Bar.findAll({ where : query })
+      res.json(bars);
     } catch (error) {
-        res.status(500).json({ error: "J'ai pas trouvé tout les bars" });
+      res.status(400).json({ error: "Y'a pas cette ville là ici" });
     }
 };
+
 const read = async (req, res) => {
     try {
         const id = parseInt(req.params.id);
@@ -73,42 +83,4 @@ const destroy = async (req, res) => {
     }
 };
 
-//Liste des bars d'une ville donnée
-const getVille = async (req, res) => {
-    const ville = req.query.ville
-
-    try{
-        const bars = await Bar.findAll({
-            where: {
-                adresse: {
-                    [db.sequelize.Op.like]: `%${ville}%`
-                }
-            }
-        })
-        res.json(bars);
-    } catch (error){
-        res.status(400).json({error:"Y'a pas de cette ville là ici"});
-    }
-
-}
-
-//Liste des bars d'un nom donné
-const getName = async (req, res) => {
-    const name = req.query.name
-
-    try{
-        const bars = await Bar.findAll({
-            where: {
-                nom: {
-                    [db.sequelize.Op.like]: `%${name}%`
-                }
-            }
-        })
-        res.json(name);
-    } catch (error){
-        res.status(400).json({error:"Y'a pas de ce nom là ici"});
-    }
-
-}
-
-module.exports = { index, create, read, update, destroy, getVille, getName };
+module.exports = { index, create, read, update, destroy };
