@@ -4,7 +4,7 @@
     "description": "Site de biere apie",
     "main": "index.js",
     "scripts": {
-        "test": "jest",
+        "test": "NODE_ENV=test jest",
         "dev": "nodemon index.js"
     },
     "repository": {
@@ -31,6 +31,9 @@
     },
     "jest": {
         "testEnvironment": "node",
+        "setupFiles": [
+            "Projet_Node/tests/setup.js"
+        ],
         "coveragePathIgnorePatterns": [
             "/node_modules/"
         ]
