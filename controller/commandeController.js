@@ -1,4 +1,7 @@
 const { Commande, Bar } = require("../model/models");
+const { Op } = require("sequelize");
+const PDFDocument = require("pdfkit");
+const fs = require("fs");
 const sequelize = require("sequelize");
 
 const index = async (req, res) => {
@@ -101,5 +104,45 @@ const destroy = (req, res) => {
         .catch((error) => res.status(500).json(error));
 };
 
+const getCommandPDF = async (req, res) => {
+    const { id_commande } = req.params;
 
-module.exports = { index, show, store, update, destroy };
+    try {
+        const commandeDetails = await Commande.findByPk(id_commande);
+
+        if (!commandeDetails) {
+            return res.status(404).send("Commande not found");
+        }
+
+        const doc = new PDFDocument();
+
+        const fileName = `commande_${id_commande}.pdf`;
+        const writeStream = fs.createWriteStream(fileName);
+        doc.pipe(writeStream);
+
+        doc.fontSize(25).text(`Commande Details for ID: ${id_commande}`, 100, 100);
+        doc.text(`Customer Name: ${commandeDetails.customerName}`);
+        doc.text(`Total Amount: ${commandeDetails.totalAmount}`);
+
+        doc.end();
+
+        writeStream.on("finish", function () {
+            res.download(fileName, function (err) {
+                if (err) {
+                    console.error("Error sending file:", err);
+                }
+                fs.unlinkSync(fileName);
+            });
+        });
+
+        writeStream.on("error", function (err) {
+            console.error("Error writing PDF:", err);
+        });
+    } catch (error) {
+        console.error("Error fetching commande details:", error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+
+module.exports = { index, show, store, update, destroy, getCommandPDF};
