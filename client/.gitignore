@@ -1,8 +1,3 @@
-./**/node_modules
-node_modules
-db.sqlite
-#**/*.env
-*.sqlite
 node_modules
 
 # Output
