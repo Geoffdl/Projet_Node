@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Button from "./Button.svelte";
+
 	interface Bar {
 		id: number;
 		nom: string;
@@ -7,14 +9,12 @@
 	}
 
 	const styles = {
-		container: 'grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3',
-		card: 'max-w-sm rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800',
+		container: 'grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 flex flex-row',
+		card: 'max-w-sm rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 ml-2 mr-2',
 		image: 'rounded-t-lg',
-		content: 'p-5',
-		title: 'mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white',
-		description: 'mb-3 font-normal text-gray-700 dark:text-gray-400',
-		button:
-			'inline-flex items-center rounded-lg bg-blue-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+		content: 'p-5 bg-[#54A56A]',
+		title: 'mb-2 text-2xl font-bold tracking-tight text-gray-900',
+		description: 'mb-3 font-normal text-gray-700',
 	} as const;
 
 	export let bars: Bar[] = [];
@@ -33,7 +33,7 @@
 					</h5>
 				</a>
 				<p class={styles.description}>{bar.description}</p>
-				<a href="/" class={styles.button}> Manager ce bar </a>
+				<Button title="Manager ce bar" onclick={() => window.location.href=`http://localhost:5173/bar/${bar.id}`}/>
 			</div>
 		</div>
 	{/each}
