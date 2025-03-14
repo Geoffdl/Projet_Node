@@ -1,7 +1,7 @@
 <script lang="ts">
 	interface Bar {
 		id: number;
-		name: string;
+		nom: string;
 		description: string;
 		imageUrl: string;
 	}
@@ -24,12 +24,12 @@
 	{#each bars as bar}
 		<div class={styles.card}>
 			<a href="/">
-				<img class={styles.image} src="/images/bar{bar.id}.PNG" alt={bar.name} />
+				<img class={styles.image} src="/images/bar{bar.id}.PNG" alt={bar.nom} />
 			</a>
 			<div class={styles.content}>
 				<a href="/">
 					<h5 class={styles.title}>
-						{bar.name}
+						{bar.nom}
 					</h5>
 				</a>
 				<p class={styles.description}>{bar.description}</p>

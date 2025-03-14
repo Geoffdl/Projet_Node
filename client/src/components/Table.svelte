@@ -22,9 +22,9 @@
 	} as const;
 
 	// Props with type safety
-	export let data: any[] = [];
-	export let columns: Column[] = [];
-	export let title = '';
+	export let data: any[];
+	export let columns: any[];
+	export let title: string;
 </script>
 
 <div class={styles.container}>
@@ -47,10 +47,8 @@
 				<tr class={styles.tr}>
 					{#each columns as column}
 						<td class={styles.td}>
-							{#if column.html}
-								{@html row[column.key]}
-							{:else if column.format}
-								{column.format(row[column.key])}
+							{#if column.component}
+								<svelte:component this={column.component} {row} />
 							{:else}
 								{row[column.key]}
 							{/if}

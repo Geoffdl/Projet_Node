@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Table from '../../components/Table.svelte';
+	import ActionCell from '../../components/TableActionCell.svelte';
 
 	interface Biere {
 		nom: string;
 		degree: string;
 		prix: number;
 		barId: number;
-		actions?: string;
 	}
 
 	let bieres = $state<Biere[]>([]);
@@ -21,29 +21,18 @@
 		{
 			key: 'actions',
 			label: 'Actions',
-			html: true
+			component: ActionCell
 		}
 	];
 
-	// Fetch bars data when component mounts
 	const fetchBieres = async () => {
 		try {
 			const response = await fetch('http://localhost:3001/bars/1/biere');
 			if (!response.ok) throw new Error('Failed to fetch biere');
 			const data = await response.json();
-			// Add actions HTML to each bar
+
 			bieres = data.map((biere: Biere) => ({
-				...biere,
-				actions: `
-					<div class="flex gap-2">
-						<button class="text-blue-600 hover:text-blue-800">
-							<i class="fas fa-edit"></i>
-						</button>
-						<button class="text-red-600 hover:text-red-800">
-							<i class="fas fa-trash"></i>
-						</button>
-					</div>
-				`
+				...biere
 			}));
 		} catch (error) {
 			console.error('Error fetching bars:', error);
