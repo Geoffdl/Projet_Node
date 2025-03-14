@@ -15,7 +15,7 @@
 		buttonAdd: 'pr-4'
 	};
 
-	let activeTab = $state('biere'); // Using $state for reactivity
+	let activeTab = $state('biere');
 	const toggleTab = (tab: string) => {
 		activeTab = tab;
 	};
