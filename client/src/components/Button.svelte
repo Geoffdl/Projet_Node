@@ -1,7 +1,7 @@
 <script lang="ts">
     export let title = '';
     export let onclick = () => {};
-    let buttonColor = title === '+ Ajouter' || 'Valider' || 'Annuler'
+    let buttonColor = title === '+ Ajouter' || 'Valider' || 'Annuler' || 'Manager ce bar'
         ? 'bg-[#EAD982]' 
         : title === "Supprimer"
             ? 'bg-[#E43347]'
@@ -9,7 +9,7 @@
 
     // Button style
     const styles = {
-        button: ` rounded-xl p-2 w-30 text-center ${buttonColor}`,
+        button: ` rounded-xl p-2 w-30 text-[14px] text-center ${buttonColor}`,
     };
 </script>
 
