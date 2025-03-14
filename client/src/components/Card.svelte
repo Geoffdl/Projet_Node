@@ -33,7 +33,7 @@
 					</h5>
 				</a>
 				<p class={styles.description}>{bar.description}</p>
-				<Button title="Manager ce bar" onclick={() => window.open(`http://localhost:5173/bar/${bar.id}`)}/>
+				<Button title="Manager ce bar" onclick={() => window.location.href=`http://localhost:5173/bar/${bar.id}`}/>
 			</div>
 		</div>
 	{/each}
