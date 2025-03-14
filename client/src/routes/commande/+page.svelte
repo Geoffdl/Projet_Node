@@ -2,20 +2,22 @@
 	import { onMount } from 'svelte';
 	import Table from '../../components/Table.svelte';
 
-	interface Biere {
+	interface Commande {
 		nom: string;
-		degree: string;
-		prix: number;
+		prix: string;
+		date: Date;
+		status: string;
 		barId: number;
 		actions?: string;
 	}
 
-	let bieres = $state<Biere[]>([]);
+	let commandes = $state<Commande[]>([]);
 
 	const columns = [
 		{ key: 'nom', label: 'Nom' },
-		{ key: 'degree', label: 'degré' },
 		{ key: 'prix', label: 'Prix' },
+		{ key: 'date', label: 'Date' },
+		{ key: 'status', label: 'Status' },
 		{ key: 'barId', label: 'barId' },
 
 		{
@@ -26,14 +28,14 @@
 	];
 
 	// Fetch bars data when component mounts
-	const fetchBieres = async () => {
+	const fetchCommandes = async () => {
 		try {
-			const response = await fetch('http://localhost:3001/bars/1/biere');
+			const response = await fetch('http://localhost:3001/bars/1/commandes');
 			if (!response.ok) throw new Error('Failed to fetch biere');
 			const data = await response.json();
 			// Add actions HTML to each bar
-			bieres = data.map((biere: Biere) => ({
-				...biere,
+			commandes = data.map((commande: Commande) => ({
+				...commande,
 				actions: `
 					<div class="flex gap-2">
 						<button class="text-blue-600 hover:text-blue-800">
@@ -50,10 +52,10 @@
 		}
 	};
 	onMount(() => {
-		fetchBieres();
+		fetchCommandes();
 	});
 </script>
 
 <div class="container mx-auto p-4">
-	<Table data={bieres} {columns} title="Liste des Bières" />
+	<Table data={commandes} {columns} title="Liste des Commandes" />
 </div>
