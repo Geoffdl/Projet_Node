@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Table from '../../components/Table.svelte';
+	import Button from '../../components/Button.svelte';
 
 	interface Bar {
 		nom: string;
@@ -54,6 +55,8 @@
 		fetchBars();
 	});
 </script>
+
+<Button title="+ Ajouter"/>
 
 <div class="container mx-auto p-4">
 	<Table data={bars} {columns} title="Liste des Bars" />
