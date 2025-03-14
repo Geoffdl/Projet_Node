@@ -56,7 +56,7 @@
 	});
 </script>
 
-<Button title="+ Ajouter"/>
+<Button title="Supprimer"/>
 
 <div class="container mx-auto p-4">
 	<Table data={bars} {columns} title="Liste des Bars" />

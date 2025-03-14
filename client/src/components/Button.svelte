@@ -1,9 +1,15 @@
 <script lang="ts">
+    export let title = '';
+    let buttonColor = title === '+ Ajouter' 
+        ? 'bg-[#EAD982]' 
+        : title === "Supprimer"
+            ? 'bg-[#E43347]'
+            : 'bg-stone-50'
+
     // Button style
     const styles = {
-        button: 'bg-[#EAD982] rounded-xl p-2 w-30 text-center'
+        button: ` rounded-xl p-2 w-30 text-center ${buttonColor}`,
     };
-    export let title = '';
 </script>
 
 <button class={styles.button}>{title}</button>
