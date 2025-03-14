@@ -1,4 +1,6 @@
 <script>
+	import Button from "./Button.svelte";
+
 	let { showModal = $bindable(), header, children } = $props();
 
 	let dialog = $state(); // HTMLDialogElement
@@ -6,60 +8,26 @@
 	$effect(() => {
 		if (showModal) dialog.showModal();
 	});
+
+    const styles = {
+        dialog:'max-w-[32rem] rounded-[0.2em] border-none p-0 backdrop:bg-[rgba(0, 0, 0, 0.3)] mx-[50rem] my-[10rem]',
+        content:'p-[1em]',
+
+    };
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
-<dialog
+<dialog class={styles.dialog}
 	bind:this={dialog}
 	onclose={() => (showModal = false)}
 	onclick={(e) => { if (e.target === dialog) dialog.close(); }}
 >
-	<div>
+	<div class={styles.content}>
 		{@render header?.()}
 		<hr />
 		{@render children?.()}
 		<hr />
 		<!-- svelte-ignore a11y_autofocus -->
-		<button autofocus onclick={() => dialog.close()}>close modal</button>
+		<Button title="close modal" onclick={() => dialog.close()}/>
 	</div>
 </dialog>
-
-<style>
-	dialog {
-		max-width: 32em;
-		border-radius: 0.2em;
-		border: none;
-		padding: 0;
-	}
-	dialog::backdrop {
-		background: rgba(0, 0, 0, 0.3);
-	}
-	dialog > div {
-		padding: 1em;
-	}
-	dialog[open] {
-		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-	}
-	@keyframes zoom {
-		from {
-			transform: scale(0.95);
-		}
-		to {
-			transform: scale(1);
-		}
-	}
-	dialog[open]::backdrop {
-		animation: fade 0.2s ease-out;
-	}
-	@keyframes fade {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-	button {
-		display: block;
-	}
-</style>

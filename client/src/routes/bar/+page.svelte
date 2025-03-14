@@ -53,7 +53,7 @@
 	let showModal = $state(false);
 </script>
 
-<button onclick={() => (showModal = true)}> show modal </button>
+<Button title="+ Ajouter" onclick={() => (showModal = true)}/>
 
 <div class="container mx-auto p-4">
 	<Table data={bars} {columns} title="Liste des Bars" />
@@ -68,7 +68,7 @@
 		</h2>
 	{/snippet}
 
-	<ol class="definition-list">
+	<ol>
 		<li>of or relating to modality in logic</li>
 		<li>
 			containing provisions as to the mode of procedure or the manner of taking effect —used of a
