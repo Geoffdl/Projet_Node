@@ -1,7 +1,4 @@
 <script lang="ts">
-	/**
-	 * Type for a single column definition
-	 */
 	interface Column<T = any> {
 		key: keyof T;
 		label: string;
@@ -21,7 +18,6 @@
 		noData: 'px-6 py-4 text-center'
 	} as const;
 
-	// Props with type safety
 	export let data: any[];
 	export let columns: any[];
 	export let title: string;
