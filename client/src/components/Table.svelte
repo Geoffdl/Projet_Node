@@ -15,7 +15,7 @@
 		title: 'p-4 text-xl font-semibold text-gray-800',
 		table: 'w-full text-left text-sm text-gray-500',
 		thead: 'bg-gray-50 text-xs uppercase text-gray-700',
-		th: 'px-6 py-3',
+		th: 'px-6 py-3 bg-[#54A56A] text-stone-50',
 		tr: 'border-b bg-white hover:bg-gray-50',
 		td: 'px-6 py-4',
 		noData: 'px-6 py-4 text-center'
