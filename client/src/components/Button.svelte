@@ -1,5 +1,6 @@
 <script lang="ts">
     export let title = '';
+    export let onclick = () => {};
     let buttonColor = title === '+ Ajouter' 
         ? 'bg-[#EAD982]' 
         : title === "Supprimer"
@@ -12,4 +13,4 @@
     };
 </script>
 
-<button class={styles.button}>{title}</button>
+<button class={styles.button} on:click={onclick}>{title}</button>

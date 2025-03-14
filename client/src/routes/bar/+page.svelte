@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import Table from '../../components/Table.svelte';
 	import Button from '../../components/Button.svelte';
+	import Modal from '../../components/Modal.svelte';
 
 	interface Bar {
 		nom: string;
@@ -54,11 +55,39 @@
 	onMount(() => {
 		fetchBars();
 	});
+
+	let showModal = $state(false);
 </script>
 
-<Button title="Supprimer"/>
+<button onclick={() => (showModal = true)}> show modal </button>
 
 <div class="container mx-auto p-4">
 	<Table data={bars} {columns} title="Liste des Bars" />
 </div>
 <br />
+
+<Modal bind:showModal>
+	{#snippet header()}
+		<h2>
+			modal
+			<small><em>adjective</em> mod·al \ˈmō-dəl\</small>
+		</h2>
+	{/snippet}
+
+	<ol class="definition-list">
+		<li>of or relating to modality in logic</li>
+		<li>
+			containing provisions as to the mode of procedure or the manner of taking effect —used of a
+			contract or legacy
+		</li>
+		<li>of or relating to a musical mode</li>
+		<li>of or relating to structure as opposed to substance</li>
+		<li>
+			of, relating to, or constituting a grammatical form or category characteristically indicating
+			predication
+		</li>
+		<li>of or relating to a statistical mode</li>
+	</ol>
+
+	<a href="https://www.merriam-webster.com/dictionary/modal">merriam-webster.com</a>
+</Modal>
