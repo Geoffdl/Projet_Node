@@ -1,10 +1,8 @@
 <script lang="ts">
-
-    //button style
-    const styles={
-        button: 'bg-[#EAD982] border border-black p-4 w-32 text-center' ,
-    } as const;
-
+    // Button style
+    const styles = {
+        button: 'bg-[#EAD982] rounded-xl p-2 w-30 text-center'
+    };
     export let title = '';
 </script>
 
