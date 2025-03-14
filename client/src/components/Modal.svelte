@@ -1,7 +1,7 @@
 <script>
 	import Button from "./Button.svelte";
 
-	let { showModal = $bindable(), header, children } = $props();
+	let { showModal = $bindable(), header } = $props();
 
 	let dialog = $state(); // HTMLDialogElement
 
@@ -10,13 +10,12 @@
 	});
 
     const styles = {
-        dialog:'max-w-[32rem] rounded-[0.2em] border-none p-0 backdrop:bg-[rgba(0, 0, 0, 0.3)] mx-[50rem] my-[10rem]',
+        dialog:'max-w-[64rem] rounded-[0.2em] border-none p-0 backdrop:bg-[rgba(0, 0, 0, 0.3)] relative mt-[5rem] ml-[30rem]',
         content:'p-[1em]',
-
+        formInput: 'flex flex-col p-2',
     };
 </script>
 
-<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
 <dialog class={styles.dialog}
 	bind:this={dialog}
 	onclose={() => (showModal = false)}
@@ -24,10 +23,15 @@
 >
 	<div class={styles.content}>
 		{@render header?.()}
-		<hr />
-		{@render children?.()}
-		<hr />
-		<!-- svelte-ignore a11y_autofocus -->
-		<Button title="close modal" onclick={() => dialog.close()}/>
+
+        <form action="">
+            <div class= {styles.formInput}>
+                <label for="">nom</label>
+                <input type="text">
+            </div>
+        </form>
+
+
+		<Button title="Valider" onclick={() => dialog.close()}/>
 	</div>
 </dialog>
