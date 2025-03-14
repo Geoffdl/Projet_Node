@@ -2,6 +2,7 @@
 	import Table from './Table.svelte';
 	import ActionCell from './TableActionCell.svelte';
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 	const id = $page.params.id;
 	interface Commande {
 		id: number;
@@ -39,8 +40,9 @@
 			console.error('Error fetching commandes:', error);
 		}
 	};
-
-	fetchCommandes();
+	onMount(() => {
+		fetchCommandes();
+	});
 </script>
 
 <Table data={commandes} {columns} title="Liste des Commandes" />
