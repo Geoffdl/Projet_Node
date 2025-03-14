@@ -26,7 +26,8 @@
 		}
 	];
 
-	const fetchBieres = async () => {
+	// Make fetchBieres accessible to parent components
+	export const fetchBieres = async () => {
 		try {
 			const response = await fetch(`http://localhost:3001/bars/${id}/biere`);
 			if (!response.ok) throw new Error('Failed to fetch biere');
@@ -39,6 +40,7 @@
 			console.error('Error fetching bars:', error);
 		}
 	};
+
 	onMount(() => {
 		fetchBieres();
 	});

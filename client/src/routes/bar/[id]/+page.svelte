@@ -3,6 +3,7 @@
 	import TableDataCommande from '../../../components/TableDataCommande.svelte';
 	import TableDataBiereWithoutBarInfo from '../../../components/TableDataBiereWithoutBarInfo.svelte';
 	import Button from '../../../components/Button.svelte';
+	import type { ComponentType, SvelteComponent } from 'svelte';
 
 	import ModalAddBiere from '../../../components/ModalAddBiere.svelte';
 
@@ -21,6 +22,17 @@
 		activeTab = tab;
 	};
 	let showModal = $state(false);
+
+	// Reference to the table component with proper typing
+	let biereTable: { fetchBieres: () => Promise<void> };
+
+	// Handle the biereAdded event
+	function handleBiereAdded() {
+		// Refresh the table data
+		if (biereTable) {
+			biereTable.fetchBieres();
+		}
+	}
 </script>
 
 <div class={styles.container}>
@@ -40,8 +52,13 @@
 		<TableDataCommande />
 	</div>
 	<div id="biere" class={styles.tab} hidden={activeTab !== 'biere'}>
-		<TableDataBiereWithoutBarInfo />
+		<TableDataBiereWithoutBarInfo bind:this={biereTable} />
 	</div>
 </div>
 
-<ModalAddBiere bind:showModal header={() => 'Ajouter une bière'} barId={id} />
+<ModalAddBiere
+	bind:showModal
+	header={() => 'Ajouter une bière'}
+	barId={id}
+	on:biereAdded={handleBiereAdded}
+/>

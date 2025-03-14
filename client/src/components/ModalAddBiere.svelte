@@ -1,7 +1,9 @@
 <script lang="ts">
 	import Button from './Button.svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	let { showModal = $bindable(), header, barId } = $props();
+	const dispatch = createEventDispatcher();
 
 	let dialog: HTMLDialogElement | null = $state(null);
 	let nom = $state('');
@@ -55,6 +57,9 @@
 				nom = '';
 				degree = 0;
 				prix = 0;
+
+				// Dispatch event to notify that a beer was added
+				dispatch('biereAdded');
 
 				// Close the dialog
 				if (dialog) dialog.close();
