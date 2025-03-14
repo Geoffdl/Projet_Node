@@ -4,6 +4,7 @@
 	const styles = {
 		header: 'relative z-20 flex flex-col',
 		headerChild: 'mx-auto flex w-full max-w-[1400px] items-center justify-between p-4 py-6',
+		title: 'font-semibold flex justify-center items-center',
 		nav : 'hidden items-center gap-6 md:flex',
 		navChild : 'cursor-pointer duration-200 hover:text-amber-400'
 	}
@@ -13,7 +14,7 @@
 <header class={styles.header}>
 	<div class={styles.headerChild}>
 		<a href="/">
-			<h1 class="font-semibold">
+			<h1 class={styles.title}>
 				Bar
 				<span class="text-amber-300">Manager</span>
 			</h1>
