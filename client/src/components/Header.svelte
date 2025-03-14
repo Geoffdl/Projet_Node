@@ -24,8 +24,8 @@
 			<i class="fa-solid fa-bars"></i>
 		</button>
 		<nav class={styles.nav}>
-			<a href="/biere" class={styles.navChild}>Bieres</a>
 			<a href="/bar" class={styles.navChild}>Bars</a>
+			<a href="/biere" class={styles.navChild}>Bieres</a>
 			<a href="/commande" class={styles.navChild}>Commandes</a>
 		</nav>
 	</div>
