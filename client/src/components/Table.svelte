@@ -1,56 +1,65 @@
 <script lang="ts">
-	// Combine all props into a single $props() call
-	let { data = [], columns = [], title = '', actions = () => {} } = $props();
-
-	// Type for column definition
-	type Column = {
-		key: string;
+	/**
+	 * Type for a single column definition
+	 */
+	interface Column<T = any> {
+		key: keyof T;
 		label: string;
-		format?: (value: any) => string;
-	};
+		format?: (value: T[keyof T]) => string;
+		html?: boolean;
+	}
+
+	// Table styles
+	const styles = {
+		container: 'overflow-x-auto bg-white shadow-md sm:rounded-lg',
+		title: 'p-4 text-xl font-semibold text-gray-800',
+		table: 'w-full text-left text-sm text-gray-500',
+		thead: 'bg-gray-50 text-xs uppercase text-gray-700',
+		th: 'px-6 py-3',
+		tr: 'border-b bg-white hover:bg-gray-50',
+		td: 'px-6 py-4',
+		noData: 'px-6 py-4 text-center'
+	} as const;
+
+	// Props with type safety
+	export let data: any[] = [];
+	export let columns: Column[] = [];
+	export let title = '';
 </script>
 
-<div class="overflow-x-auto bg-white shadow-md sm:rounded-lg">
+<div class={styles.container}>
 	{#if title}
-		<h2 class="p-4 text-xl font-semibold text-gray-800">{title}</h2>
+		<h2 class={styles.title}>{title}</h2>
 	{/if}
 
-	<table class="w-full text-left text-sm text-gray-500">
-		<thead class="bg-gray-50 text-xs uppercase text-gray-700">
+	<table class={styles.table}>
+		<thead class={styles.thead}>
 			<tr>
 				{#each columns as column}
-					<th scope="col" class="px-6 py-3">
+					<th scope="col" class={styles.th}>
 						{column.label}
 					</th>
 				{/each}
-				{#if actions}
-					<th scope="col" class="px-6 py-3"> Actions </th>
-				{/if}
 			</tr>
 		</thead>
 		<tbody>
 			{#each data as row}
-				<tr class="border-b bg-white hover:bg-gray-50">
+				<tr class={styles.tr}>
 					{#each columns as column}
-						<td class="px-6 py-4">
-							{#if column.format}
+						<td class={styles.td}>
+							{#if column.html}
+								{@html row[column.key]}
+							{:else if column.format}
 								{column.format(row[column.key])}
 							{:else}
 								{row[column.key]}
 							{/if}
 						</td>
 					{/each}
-					{#if actions}
-						<td class="px-6 py-4">
-							{@render actions(row)}
-						</td>
-					{/if}
 				</tr>
 			{:else}
 				<tr>
-					<td colspan={columns.length + (actions ? 1 : 0)} class="px-6 py-4 text-center">
-						No data available
-					</td>
+					<td colspan={columns.length} class={styles.noData}> No data available </td>
 				</tr>
 			{/each}
 		</tbody>
