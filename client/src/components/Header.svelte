@@ -1,11 +1,20 @@
 <script>
 	import Card from './Card.svelte';
+
+	const styles = {
+		header: 'relative z-20 flex flex-col',
+		headerChild: 'mx-auto flex w-full max-w-[1400px] items-center justify-between p-4 py-6',
+		title: 'font-semibold flex justify-center items-center',
+		nav : 'hidden items-center gap-6 md:flex',
+		navChild : 'cursor-pointer duration-200 hover:text-amber-400'
+	}
+
 </script>
 
-<header class="relative z-20 flex flex-col">
-	<div class="mx-auto flex w-full max-w-[1400px] items-center justify-between p-4 py-6">
+<header class={styles.header}>
+	<div class={styles.headerChild}>
 		<a href="/">
-			<h1 class="font-semibold">
+			<h1 class={styles.title}>
 				Bar
 				<span class="text-amber-300">Manager</span>
 			</h1>
@@ -14,10 +23,10 @@
 		<button aria-label="headerBtn" class="grid place-items-center md:hidden">
 			<i class="fa-solid fa-bars"></i>
 		</button>
-		<nav class="hidden items-center gap-6 md:flex">
-			<a href="/biere" class="cursor-pointer duration-200 hover:text-amber-400">Bieres</a>
-			<a href="/bar" class="cursor-pointer duration-200 hover:text-amber-400">Bars</a>
-			<a href="/commande" class="cursor-pointer duration-200 hover:text-amber-400">Commandes</a>
+		<nav class={styles.nav}>
+			<a href="/bar" class={styles.navChild}>Bars</a>
+			<a href="/biere" class={styles.navChild}>Bieres</a>
+			<a href="/commande" class={styles.navChild}>Commandes</a>
 		</nav>
 	</div>
 </header>
