@@ -3,7 +3,8 @@
 	import TableDataCommande from '../../../components/TableDataCommande.svelte';
 	import TableDataBiereWithoutBarInfo from '../../../components/TableDataBiereWithoutBarInfo.svelte';
 	import Button from '../../../components/Button.svelte';
-	import ModalAdd from '../../../components/ModalAdd.svelte';
+
+	import ModalAddBiere from '../../../components/ModalAddBiere.svelte';
 
 	const id = $page.params.id;
 
@@ -31,7 +32,7 @@
 			<Button title="Commandes" onclick={() => toggleTab('commande')} />
 		</div>
 		<div class={styles.buttonAdd}>
-			<Button title="+ Ajouter" />
+			<Button title="+ Ajouter" onclick={() => (showModal = true)} />
 		</div>
 	</div>
 
@@ -42,3 +43,5 @@
 		<TableDataBiereWithoutBarInfo />
 	</div>
 </div>
+
+<ModalAddBiere bind:showModal header={() => 'Ajouter une bière'} barId={id} />
