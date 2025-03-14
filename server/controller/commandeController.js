@@ -5,32 +5,47 @@ const fs = require("fs");
 const sequelize = require("sequelize");
 
 const index = async (req, res) => {
-    const query = {}
+    const query = {};
 
-    if (req.query.date)
-        {query.date = req.query.date} 
-    if (req.query.status)
-        {query.status = req.query.status} 
-    if (req.query.name)
-        {query.name = req.query.name} 
-    if (req.query.prix_min && req.query.prix_max){
-        query.prix = {[Op.between]: [req.query.prix_min, req.query.prix_max]}
+    if (req.query.date) {
+        query.date = req.query.date;
     }
+    if (req.query.status) {
+        query.status = req.query.status;
+    }
+    if (req.query.name) {
+        query.name = req.query.name;
+    }
+    if (req.query.prix_min && req.query.prix_max) {
+        query.prix = { [Op.between]: [req.query.prix_min, req.query.prix_max] };
+    }
+
+    // Get pagination parameters from query or use defaults
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    const offset = (page - 1) * limit;
 
     const barId = parseInt(req.params.id);
     try {
         const commandes = await Commande.findAll({
             where: {
                 barId: barId,
-                ...query
+                ...query,
             },
-            limit: 10,
-            offset: 5,
-            attributes: ["id", "nom", "prix", "status"],
+            limit: limit,
+            offset: offset,
+            attributes: ["id", "nom", "prix", "status", "date"],
+            order: [["date", "DESC"]],
         });
+
+        if (!commandes.length) {
+            return res.status(200).json([]);
+        }
+
         res.json(commandes);
     } catch (error) {
-        res.status(500).json({ message: "Il n'y a pas de commande"});
+        console.error("Error fetching commandes:", error);
+        res.status(500).json({ message: "Erreur lors de la récupération des commandes", error: error.message });
     }
 };
 
@@ -144,5 +159,4 @@ const getCommandPDF = async (req, res) => {
     }
 };
 
-
-module.exports = { index, show, store, update, destroy, getCommandPDF};
+module.exports = { index, show, store, update, destroy, getCommandPDF };
