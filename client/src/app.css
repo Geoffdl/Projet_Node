@@ -1,1 +1,10 @@
 @import 'tailwindcss';
+
+html {
+	scroll-behavior: smooth;
+	background-color: rgb(231, 231, 231);
+}
+
+* {
+	font-family: 'Open Sans', sans-serif;
+}

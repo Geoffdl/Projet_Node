@@ -1,21 +1,46 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import Table from '../../components/Table.svelte';
+	import ActionCell from '../../components/TableActionCell.svelte';
 
-	let bieres = $state([{ id: 1, nom: 'Beer Name', degree: 5.5, prix: 4.5 }]);
+	interface Biere {
+		nom: string;
+		degree: string;
+		prix: number;
+		barId: number;
+	}
+
+	let bieres = $state<Biere[]>([]);
 
 	const columns = [
-		{ key: 'nom', label: 'Name' },
+		{ key: 'nom', label: 'Nom' },
+		{ key: 'degree', label: 'degré' },
+		{ key: 'prix', label: 'Prix' },
+		{ key: 'barId', label: 'barId' },
+
 		{
-			key: 'degree',
-			label: 'Alcohol %',
-			format: (value: number) => `${value}%`
-		},
-		{
-			key: 'prix',
-			label: 'Price',
-			format: (value: number) => `${value}€`
+			key: 'actions',
+			label: 'Actions',
+			component: ActionCell
 		}
 	];
+
+	const fetchBieres = async () => {
+		try {
+			const response = await fetch('http://localhost:3001/bars/1/biere');
+			if (!response.ok) throw new Error('Failed to fetch biere');
+			const data = await response.json();
+
+			bieres = data.map((biere: Biere) => ({
+				...biere
+			}));
+		} catch (error) {
+			console.error('Error fetching bars:', error);
+		}
+	};
+	onMount(() => {
+		fetchBieres();
+	});
 </script>
 
 <div class="container mx-auto p-4">

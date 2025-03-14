@@ -1,8 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Table from '../../components/Table.svelte';
+
+	
+  
+
+  import ActionCell from '../../components/TableActionCell.svelte';
 	import Button from '../../components/Button.svelte';
 	import Modal from '../../components/Modal.svelte';
+
 
 	interface Bar {
 		nom: string;
@@ -10,7 +16,6 @@
 		tel: string;
 		email: string;
 		description: string;
-		actions?: string;
 	}
 
 	let bars = $state<Bar[]>([]);
@@ -24,29 +29,18 @@
 		{
 			key: 'actions',
 			label: 'Actions',
-			html: true
+			component: ActionCell
 		}
 	];
 
-	// Fetch bars data when component mounts
 	const fetchBars = async () => {
 		try {
 			const response = await fetch('http://localhost:3001/bars');
 			if (!response.ok) throw new Error('Failed to fetch bars');
 			const data = await response.json();
-			// Add actions HTML to each bar
+
 			bars = data.map((bar: Bar) => ({
-				...bar,
-				actions: `
-					<div class="flex gap-2">
-						<button class="text-blue-600 hover:text-blue-800">
-							<i class="fas fa-edit"></i>
-						</button>
-						<button class="text-red-600 hover:text-red-800">
-							<i class="fas fa-trash"></i>
-						</button>
-					</div>
-				`
+				...bar
 			}));
 		} catch (error) {
 			console.error('Error fetching bars:', error);
