@@ -22,9 +22,13 @@
 	} as const;
 
 	// Props with type safety
-	export let data: any[];
-	export let columns: any[];
-	export let title: string;
+	let { data, columns, title, onEditClick, onDeleteClick } = $props<{
+		data: any[];
+		columns: any[];
+		title: string;
+		onEditClick?: (row: any) => void;
+		onDeleteClick?: (row: any) => void;
+	}>();
 </script>
 
 <div class={styles.container}>
@@ -48,7 +52,7 @@
 					{#each columns as column}
 						<td class={styles.td}>
 							{#if column.component}
-								<svelte:component this={column.component} {row} />
+								<svelte:component this={column.component} {row} {onEditClick} {onDeleteClick} />
 							{:else}
 								{row[column.key]}
 							{/if}

@@ -1,5 +1,11 @@
-<script></script>
+<script>
+	let { onEdit } = $props();
 
-<button class="text-blue-600 hover:text-blue-800" aria-label="edit">
+	function handleClick() {
+		onEdit?.();
+	}
+</script>
+
+<button class="text-blue-600 hover:text-blue-800" aria-label="edit" onclick={handleClick}>
 	<i class="fas fa-edit"></i>
 </button>

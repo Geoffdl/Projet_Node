@@ -6,6 +6,10 @@
 
 	const id = $page.params.id;
 
+	let { onEditClick, onDeleteClick } = $props<{
+		onEditClick?: (biere: any) => void;
+		onDeleteClick?: (biere: any) => void;
+	}>();
 	interface Biere {
 		nom: string;
 		degree: string;
@@ -46,4 +50,4 @@
 	});
 </script>
 
-<Table data={bieres} {columns} title="Liste des Bières" />
+<Table data={bieres} {columns} title="Liste des Bières" {onEditClick} {onDeleteClick} />

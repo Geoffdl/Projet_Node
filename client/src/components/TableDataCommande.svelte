@@ -3,7 +3,14 @@
 	import ActionCell from './TableActionCell.svelte';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+
 	const id = $page.params.id;
+
+	let { onEditClick, onDeleteClick } = $props<{
+		onEditClick?: (commande: any) => void;
+		onDeleteClick?: (commande: any) => void;
+	}>();
+
 	interface Commande {
 		id: number;
 		nom: string;
@@ -26,7 +33,7 @@
 		}
 	];
 
-	const fetchCommandes = async () => {
+	export const fetchCommandes = async () => {
 		try {
 			const response = await fetch(`http://localhost:3001/bars/${id}/commandes`);
 			if (!response.ok) throw new Error('Failed to fetch commandes');
@@ -45,4 +52,4 @@
 	});
 </script>
 
-<Table data={commandes} {columns} title="Liste des Commandes" />
+<Table data={commandes} {columns} title="Liste des Commandes" {onEditClick} {onDeleteClick} />
