@@ -14,6 +14,8 @@
 		header?: () => any;
 		tableType?: string;
 		onSubmit?: (data: any, type: string, mode: string, id?: number) => void;
+		mode?: string;
+		currentItem?: any;
 	}>();
 
 	// Fix 2: Initialize dialog with null to avoid undefined
@@ -37,7 +39,6 @@
 
 	let formData = $state<FormData>({} as FormData);
 
-	// Initialize form data based on table type
 	$effect(() => {
 		if (mode === 'add') {
 			if (tableType === 'biere') {
@@ -50,8 +51,8 @@
 				formData = {
 					nom: '',
 					prix: '',
-					date: new Date().toISOString().split('T')[0], // Default to today
-					status: 'brouillon' // Default status
+					date: new Date().toISOString().split('T')[0],
+					status: 'brouillon'
 				} as CommandeFormData;
 			}
 		} else if (mode === 'edit' && currentItem) {
@@ -77,10 +78,8 @@
 	});
 
 	function handleSubmit(event: Event) {
-		// Fix 3: Handle preventDefault manually
 		event.preventDefault();
 
-		// Call the onSubmit callback with the form data, table type, mode, and item id if editing
 		if (onSubmit) {
 			const id = mode === 'edit' && currentItem ? currentItem.id : undefined;
 			onSubmit(formData, tableType, mode, id);
@@ -89,7 +88,6 @@
 	}
 
 	function handleInputChange(field: string, value: string) {
-		// Type-safe way to update formData
 		formData = {
 			...formData,
 			[field]: value
@@ -209,9 +207,8 @@
 			{/if}
 
 			<div class={styles.formActions}>
-				<!-- Fix 4: Remove type attribute if not supported by Button component -->
 				<Button title="Annuler" onclick={() => dialog?.close()} />
-				<!-- Fix 4: Use buttonType or similar if needed -->
+
 				<button
 					type="submit"
 					class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"

@@ -31,7 +31,6 @@
 
 		if (tableType === 'biere') {
 			if (mode === 'add') {
-				// Send POST request to add a beer
 				fetch(`http://localhost:3001/bars/${id}/biere`, {
 					method: 'POST',
 					headers: {
@@ -53,7 +52,6 @@
 						console.error('Error adding beer:', error);
 					});
 			} else if (mode === 'edit' && id) {
-				// Send PUT request to update a beer
 				fetch(`http://localhost:3001/biere/${id}`, {
 					method: 'PUT',
 					headers: {
@@ -77,7 +75,6 @@
 			}
 		} else if (tableType === 'commande') {
 			if (mode === 'add') {
-				// Send POST request to add a command
 				fetch(`http://localhost:3001/bars/${id}/commandes`, {
 					method: 'POST',
 					headers: {
@@ -99,7 +96,6 @@
 						console.error('Error adding command:', error);
 					});
 			} else if (mode === 'edit' && id) {
-				// Send PUT request to update a command
 				fetch(`http://localhost:3001/commande/${id}`, {
 					method: 'PUT',
 					headers: {
@@ -124,19 +120,16 @@
 		}
 	}
 
-	// Reference to the table component with proper typing
 	let biereTable: { fetchBieres: () => Promise<void> };
 	let commandeTable: { fetchCommandes: () => Promise<void> };
-	// Handle the biereAdded event
+
 	function handleBiereAdded() {
-		// Refresh the table data
 		if (biereTable) {
 			biereTable.fetchBieres();
 		}
 	}
 
 	function handleCommandeAdded() {
-		// Refresh the table data
 		if (commandeTable) {
 			commandeTable.fetchCommandes();
 		}
