@@ -4,7 +4,7 @@
     "description": "Site de biere apie",
     "main": "index.js",
     "scripts": {
-        "test": "cross-env NODE_ENV=test jest",
+        "test": "cross-env NODE_ENV=test TESTING=true jest",
         "dev": "nodemon index.js"
     },
     "repository": {

@@ -3,19 +3,19 @@ const { Op } = require("sequelize");
 const { Bar } = require("../model/models");
 
 const index = async (req, res) => {
-    const query = {}
-  
+    const query = {};
+
     if (req.query.ville) {
-      query.adresse = { [Op.like]: `%${req.query.ville}%` }
+        query.adresse = { [Op.like]: `%${req.query.ville}%` };
     } else if (req.query.name) {
-      query.nom = { [Op.like]: `%${req.query.name}%` }
+        query.nom = { [Op.like]: `%${req.query.name}%` };
     }
-  
+
     try {
-      const bars = await Bar.findAll({ where : query })
-      res.json(bars);
+        const bars = await Bar.findAll({ where: query });
+        res.json(bars);
     } catch (error) {
-      res.status(400).json({ error: "Y'a pas cette ville là ici" });
+        res.status(400).json({ error: "Y'a pas cette ville là ici" });
     }
 };
 
@@ -45,7 +45,7 @@ const create = async (req, res) => {
             ...req.body,
         });
 
-        res.status(201).json(bar);
+        res.status(200).json(bar);
     } catch (error) {
         res.status(400).json({ error: "ça marche pas" });
     }
@@ -84,15 +84,14 @@ const destroy = async (req, res) => {
 };
 
 const getBarByDegree = async (req, res) => {
-    const query = {}
+    const query = {};
     const include = [];
-    if(req.query.prix_min && req.query.prix_max){
-        query.prix = {[Op.between]: [req.query.prix_min, req.query.prix_max]}
-    }
-    else if (req.query.date) {
+    if (req.query.prix_min && req.query.prix_max) {
+        query.prix = { [Op.between]: [req.query.prix_min, req.query.prix_max] };
+    } else if (req.query.date) {
         include.push({
             model: Commande,
-            where: { date: req.query.date }
+            where: { date: req.query.date },
         });
     }
 
@@ -101,14 +100,14 @@ const getBarByDegree = async (req, res) => {
         const bieres = await Biere.findAll({
             where: {
                 barId: barId,
-                ...query
+                ...query,
             },
             include,
             attributes: [[sequelize.fn("AVG", sequelize.col("degree")), "Degre d'alcool moyen"]],
         });
         res.json(bieres);
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).json({ message: "Il n'y a pas de bières" });
     }
 };

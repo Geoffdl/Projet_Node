@@ -18,8 +18,10 @@ app.use((req, res) => {
     res.status(404).json({ message: "Route non définit" });
 });
 
-app.listen(PORT, () => {
-    console.log(`ça marche ou bien ?! on port ${PORT}`);
-});
+if (process.env.TESTING !== "true") {
+    app.listen(PORT, () => {
+        console.log(`ça marche ou bien ?! on port ${PORT}`);
+    });
+}
 
 module.exports = app;
