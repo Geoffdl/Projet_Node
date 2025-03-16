@@ -29,9 +29,11 @@
 	function handleFormSubmit(formData: any, tableType: string, mode: string, id?: number) {
 		console.log('Form submitted:', formData, 'for table:', tableType, 'mode:', mode, 'id:', id);
 
+		const barId = $page.params.id;
+
 		if (tableType === 'biere') {
 			if (mode === 'add') {
-				fetch(`http://localhost:3001/bars/${id}/biere`, {
+				fetch(`http://localhost:3001/bars/${barId}/biere`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
@@ -75,7 +77,7 @@
 			}
 		} else if (tableType === 'commande') {
 			if (mode === 'add') {
-				fetch(`http://localhost:3001/bars/${id}/commandes`, {
+				fetch(`http://localhost:3001/bars/${barId}/commandes`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
@@ -96,7 +98,7 @@
 						console.error('Error adding command:', error);
 					});
 			} else if (mode === 'edit' && id) {
-				fetch(`http://localhost:3001/commande/${id}`, {
+				fetch(`http://localhost:3001/commandes/${id}`, {
 					method: 'PUT',
 					headers: {
 						'Content-Type': 'application/json'

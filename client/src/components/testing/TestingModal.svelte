@@ -1,13 +1,12 @@
 <script lang="ts">
 	import Button from '../Button.svelte';
 
-	// Fix 1: Move $props() to the top level as a single declaration
 	let {
 		showModal = $bindable(false),
 		header,
-		tableType = 'biere', // Remove $props<string>
+		tableType = 'biere',
 		onSubmit,
-		mode = 'add', // 'add' or 'edit'
+		mode = 'add',
 		currentItem = null
 	} = $props<{
 		showModal?: boolean;
@@ -18,10 +17,8 @@
 		currentItem?: any;
 	}>();
 
-	// Fix 2: Initialize dialog with null to avoid undefined
 	let dialog = $state<HTMLDialogElement | null>(null);
 
-	// Define types for form data
 	type BiereFormData = {
 		nom: string;
 		degree: string;
@@ -63,10 +60,12 @@
 					prix: currentItem.prix?.toString() || ''
 				} as BiereFormData;
 			} else if (tableType === 'commande') {
+				const [day, month, year] = currentItem.date.split('/');
+				const formattedDate = `${year}-${month}-${day}`;
 				formData = {
 					nom: currentItem.nom || '',
 					prix: currentItem.prix?.toString() || '',
-					date: currentItem.date || new Date().toISOString().split('T')[0],
+					date: formattedDate,
 					status: currentItem.status || 'brouillon'
 				} as CommandeFormData;
 			}
@@ -200,8 +199,8 @@
 						required
 					>
 						<option value="brouillon">brouillon</option>
-						<option value="completed">en cours</option>
-						<option value="cancelled">terminée</option>
+						<option value="en cours">en cours</option>
+						<option value="terminée">terminée</option>
 					</select>
 				</div>
 			{/if}
