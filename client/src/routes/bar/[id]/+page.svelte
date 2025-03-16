@@ -21,7 +21,7 @@
 
 	let currentItem = $state(null);
 
-	let mode = $state('add');
+	let mode = $state<'add' | 'edit' | 'delete'>('add');
 
 	const toggleTab = (tab: string) => {
 		activeTab = tab;
@@ -73,6 +73,18 @@
 					})
 					.catch((error) => {
 						console.error('Error updating beer:', error);
+					});
+			} else if (mode === 'delete' && id) {
+				fetch(`http://localhost:3001/biere/${id}`, {
+					method: 'DELETE',
+					headers: { 'Content-Type': 'application/json' }
+				})
+					.then((response) => {
+						if (!response.ok) throw new Error('Failed to delete beer');
+						return response.json();
+					})
+					.then((data) => {
+						if (biereTable) biereTable.fetchBieres();
 					});
 			}
 		} else if (tableType === 'commande') {
@@ -153,13 +165,12 @@
 	function handleDeleteClick(item: any) {
 		currentItem = item;
 		showModal = true;
+		mode = 'delete';
 		console.log('Delete clicked for item:', item);
 	}
 </script>
 
 <div class={styles.container}>
-	<h1>Bar à l'ID {id}</h1>
-
 	<div class={styles.buttonList}>
 		<div class={styles.switch}>
 			<Button title="Bières" onclick={() => toggleTab('biere')} />
@@ -189,7 +200,7 @@
 <TestingModal
 	bind:showModal
 	header={() =>
-		`${mode === 'add' ? 'Ajouter' : 'Modifier'} ${activeTab === 'biere' ? 'une bière' : 'une commande'}`}
+		`${mode === 'add' ? 'Ajouter' : mode === 'edit' ? 'Modifier' : 'Supprimer'} ${activeTab === 'biere' ? 'une bière' : 'une commande'}`}
 	tableType={activeTab}
 	{mode}
 	{currentItem}

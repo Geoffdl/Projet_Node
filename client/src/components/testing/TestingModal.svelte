@@ -13,7 +13,7 @@
 		header?: () => any;
 		tableType?: string;
 		onSubmit?: (data: any, type: string, mode: string, id?: number) => void;
-		mode?: string;
+		mode?: 'add' | 'edit' | 'delete';
 		currentItem?: any;
 	}>();
 
@@ -80,7 +80,8 @@
 		event.preventDefault();
 
 		if (onSubmit) {
-			const id = mode === 'edit' && currentItem ? currentItem.id : undefined;
+			const id = (mode === 'edit' || mode === 'delete') && currentItem ? currentItem.id : undefined;
+
 			onSubmit(formData, tableType, mode, id);
 		}
 		if (dialog) dialog.close();
@@ -114,107 +115,123 @@
 	<div class={styles.content}>
 		{@render header?.()}
 
-		<form onsubmit={handleSubmit}>
-			{#if tableType === 'biere'}
-				<div class={styles.formChild}>
-					<label for="nom">Nom</label>
-					<input
-						type="text"
-						id="nom"
-						class={styles.formInput}
-						value={formData.nom}
-						oninput={(e) => handleInputChange('nom', (e.target as HTMLInputElement).value)}
-						required
-					/>
-				</div>
-				<div class={styles.formChild}>
-					<label for="degree">Degré</label>
-					<input
-						type="number"
-						id="degree"
-						class={styles.formInput}
-						value={'degree' in formData ? formData.degree : ''}
-						oninput={(e) => handleInputChange('degree', (e.target as HTMLInputElement).value)}
-						required
-						step="0.1"
-						min="0"
-					/>
-				</div>
-				<div class={styles.formChild}>
-					<label for="prix">Prix</label>
-					<input
-						type="number"
-						id="prix"
-						class={styles.formInput}
-						value={formData.prix}
-						oninput={(e) => handleInputChange('prix', (e.target as HTMLInputElement).value)}
-						required
-						step="0.01"
-						min="0"
-					/>
-				</div>
-			{:else if tableType === 'commande'}
-				<div class={styles.formChild}>
-					<label for="nom">Nom</label>
-					<input
-						type="text"
-						id="nom"
-						class={styles.formInput}
-						value={formData.nom}
-						oninput={(e) => handleInputChange('nom', (e.target as HTMLInputElement).value)}
-						required
-					/>
-				</div>
-				<div class={styles.formChild}>
-					<label for="prix">Prix</label>
-					<input
-						type="number"
-						id="prix"
-						class={styles.formInput}
-						value={formData.prix}
-						oninput={(e) => handleInputChange('prix', (e.target as HTMLInputElement).value)}
-						required
-						step="0.01"
-						min="0"
-					/>
-				</div>
-				<div class={styles.formChild}>
-					<label for="date">Date</label>
-					<input
-						type="date"
-						id="date"
-						class={styles.formInput}
-						value={'date' in formData ? formData.date : ''}
-						oninput={(e) => handleInputChange('date', (e.target as HTMLInputElement).value)}
-						required
-					/>
-				</div>
-				<div class={styles.formChild}>
-					<label for="status">Status</label>
-					<select
-						id="status"
-						class={styles.formInput}
-						value={'status' in formData ? formData.status : ''}
-						onchange={(e) => handleInputChange('status', (e.target as HTMLSelectElement).value)}
-						required
+		{#if mode === 'delete'}
+			<div class="p-4 text-center">
+				<p>Voulez vous vraiment supprimer {currentItem?.nom}?</p>
+				<div class={styles.formActions}>
+					<Button title="Annuler" onclick={() => dialog?.close()} />
+					<button
+						type="button"
+						class="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+						onclick={(e) => handleSubmit(e)}
 					>
-						<option value="brouillon">brouillon</option>
-						<option value="en cours">en cours</option>
-						<option value="terminée">terminée</option>
-					</select>
+						Supprimer
+					</button>
 				</div>
-			{/if}
-
-			<div class={styles.formActions}>
-				<Button title="Annuler" onclick={() => dialog?.close()} />
-
-				<button
-					type="submit"
-					class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-				>
-					{mode === 'add' ? 'Ajouter' : 'Modifier'}
-				</button>
 			</div>
-		</form>
+		{:else}
+			<form onsubmit={handleSubmit}>
+				{#if tableType === 'biere'}
+					<div class={styles.formChild}>
+						<label for="nom">Nom</label>
+						<input
+							type="text"
+							id="nom"
+							class={styles.formInput}
+							value={formData.nom}
+							oninput={(e) => handleInputChange('nom', (e.target as HTMLInputElement).value)}
+							required
+						/>
+					</div>
+					<div class={styles.formChild}>
+						<label for="degree">Degré</label>
+						<input
+							type="number"
+							id="degree"
+							class={styles.formInput}
+							value={'degree' in formData ? formData.degree : ''}
+							oninput={(e) => handleInputChange('degree', (e.target as HTMLInputElement).value)}
+							required
+							step="0.1"
+							min="0"
+						/>
+					</div>
+					<div class={styles.formChild}>
+						<label for="prix">Prix</label>
+						<input
+							type="number"
+							id="prix"
+							class={styles.formInput}
+							value={formData.prix}
+							oninput={(e) => handleInputChange('prix', (e.target as HTMLInputElement).value)}
+							required
+							step="0.01"
+							min="0"
+						/>
+					</div>
+				{:else if tableType === 'commande'}
+					<div class={styles.formChild}>
+						<label for="nom">Nom</label>
+						<input
+							type="text"
+							id="nom"
+							class={styles.formInput}
+							value={formData.nom}
+							oninput={(e) => handleInputChange('nom', (e.target as HTMLInputElement).value)}
+							required
+						/>
+					</div>
+					<div class={styles.formChild}>
+						<label for="prix">Prix</label>
+						<input
+							type="number"
+							id="prix"
+							class={styles.formInput}
+							value={formData.prix}
+							oninput={(e) => handleInputChange('prix', (e.target as HTMLInputElement).value)}
+							required
+							step="0.01"
+							min="0"
+						/>
+					</div>
+					<div class={styles.formChild}>
+						<label for="date">Date</label>
+						<input
+							type="date"
+							id="date"
+							class={styles.formInput}
+							value={'date' in formData ? formData.date : ''}
+							oninput={(e) => handleInputChange('date', (e.target as HTMLInputElement).value)}
+							required
+						/>
+					</div>
+					<div class={styles.formChild}>
+						<label for="status">Status</label>
+						<select
+							id="status"
+							class={styles.formInput}
+							value={'status' in formData ? formData.status : ''}
+							onchange={(e) => handleInputChange('status', (e.target as HTMLSelectElement).value)}
+							required
+						>
+							<option value="brouillon">brouillon</option>
+							<option value="en cours">en cours</option>
+							<option value="terminée">terminée</option>
+						</select>
+					</div>
+				{/if}
+
+				<div class={styles.formActions}>
+					<Button title="Annuler" onclick={() => dialog?.close()} />
+
+					<button
+						type="submit"
+						class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+					>
+						{mode === 'add' ? 'Ajouter' : 'Modifier'}
+					</button>
+				</div>
+			</form>
+		{/if}
 	</div>
 </dialog>
