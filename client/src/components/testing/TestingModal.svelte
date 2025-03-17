@@ -122,7 +122,7 @@
 					<Button title="Annuler" onclick={() => dialog?.close()} />
 					<button
 						type="button"
-						class="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+						class="rounded-xl p-2 w-30 text-[14px] text-center bg-[#E43347] hover:bg-[#99333F]"
 						onclick={(e) => handleSubmit(e)}
 					>
 						Supprimer
@@ -224,12 +224,7 @@
 				<div class={styles.formActions}>
 					<Button title="Annuler" onclick={() => dialog?.close()} />
 
-					<button
-						type="submit"
-						class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-					>
-						{mode === 'add' ? 'Ajouter' : 'Modifier'}
-					</button>
+					<Button title={mode === 'add' ? 'Ajouter' : 'Modifier'}/>
 				</div>
 			</form>
 		{/if}

@@ -1,11 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Table from '../../components/Table.svelte';
-
 	
-  
-
-  import ActionCell from '../../components/TableActionCell.svelte';
+	import ActionCell from '../../components/TableActionCell.svelte';
 	import Button from '../../components/Button.svelte';
 	import Modal from '../../components/Modal.svelte';
 
@@ -50,13 +47,23 @@
 		fetchBars();
 	});
 
+	const styles = {
+		container : 'container mx-auto',
+		button: 'pr-4 flex flex-row-reverse',
+		table: 'p-4'
+	}
+
 	let showModal = $state(false);
 </script>
 
-<Button title="+ Ajouter" onclick={() => (showModal = true)}/>
-
-<div class="container mx-auto p-4">
-	<Table data={bars} {columns} title="Liste des Bars" />
+<div class={styles.container}>
+	<div class={styles.button}>
+		<Button title="+ Ajouter" onclick={() => (showModal = true)}/>
+	</div>
+	
+	<div class={styles.table}>
+		<Table data={bars} {columns} title="Liste des Bars" />
+	</div>
 </div>
 <br />
 
@@ -66,6 +73,4 @@
 			Ajouter un bar
 		</h2>
 	{/snippet}
-
-
 </Modal>
