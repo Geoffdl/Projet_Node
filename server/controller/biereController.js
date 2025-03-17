@@ -2,9 +2,10 @@ const sequelize = require("sequelize");
 const { Op } = require("sequelize");
 const { Biere, Bar } = require("../model/models");
 
-const index = (req, res) => {
-    const bieres = Biere.findAll()
-    res.json(bieres);
+const index = async  (req, res) => {
+    Biere.findAll().then((biere) => {
+        res.json(biere)
+      })
 }
 
 const show = (req, res) => {
