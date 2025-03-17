@@ -53,7 +53,9 @@
 	let showModal = $state(false);
 </script>
 
-<Button title="+ Ajouter" onclick={() => (showModal = true)}/>
+<div class="container mx-auto pr-4 flex flex-row-reverse">
+	<Button title="+ Ajouter" onclick={() => (showModal = true)}/>
+</div>
 
 <div class="container mx-auto p-4">
 	<Table data={bars} {columns} title="Liste des Bars" />
