@@ -2,6 +2,11 @@ const sequelize = require("sequelize");
 const { Op } = require("sequelize");
 const { Biere, Bar } = require("../model/models");
 
+const index = (req, res) => {
+    const bieres = Biere.findAll()
+    res.json(bieres);
+}
+
 const show = (req, res) => {
     const id = parseInt(req.params.id);
 
@@ -85,4 +90,4 @@ const listBiere = async (req, res) => {
 };
  
 
-module.exports = { addBiereBar, getBiereBar, update, destroy, show, listBiere };
+module.exports = {index, addBiereBar, getBiereBar, update, destroy, show, listBiere };

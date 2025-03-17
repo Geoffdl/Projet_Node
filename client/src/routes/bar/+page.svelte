@@ -73,6 +73,4 @@
 			Ajouter un bar
 		</h2>
 	{/snippet}
-
-
 </Modal>
