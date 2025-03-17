@@ -3,7 +3,8 @@
 	import TableDataCommande from '../../../components/TableDataCommande.svelte';
 	import TableDataBiereWithoutBarInfo from '../../../components/TableDataBiereWithoutBarInfo.svelte';
 	import Button from '../../../components/Button.svelte';
-	import TestingModal from '../../../components/testing/TestingModal.svelte';
+
+	import ModalBiereCommande from '../../../components/ModalBiereCommande.svelte';
 
 	const id = $page.params.id;
 
@@ -197,7 +198,7 @@
 	</div>
 </div>
 
-<TestingModal
+<ModalBiereCommande
 	bind:showModal
 	header={() =>
 		`${mode === 'add' ? 'Ajouter' : mode === 'edit' ? 'Modifier' : 'Supprimer'} ${activeTab === 'biere' ? 'une bière' : 'une commande'}`}
