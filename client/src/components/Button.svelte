@@ -2,9 +2,7 @@
 	export let title = '';
 	export let onclick = () => {};
 
-	let buttonColor = ['+ Ajouter', 'Annuler', 'Manager ce bar', 'Bières', 'Commandes'].includes(
-		title
-	)
+	let buttonColor = ['+ Ajouter', 'Annuler', 'Manager ce bar', 'Bières', 'Commandes'].includes(title)
 		? 'bg-[#EAD982] hover:bg-[#B1A879]'
 		: ['Ajouter', 'Modifier'].includes(title)
 			? 'bg-[#54A56A] hover:bg-[#4D7C5A]'
