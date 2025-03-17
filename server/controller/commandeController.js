@@ -119,6 +119,12 @@ const destroy = (req, res) => {
         .catch((error) => res.status(500).json(error));
 };
 
+const allCommande = async  (req, res) => {
+    Commande.findAll().then((commandes) => {
+        res.json(commandes)
+      })
+}
+
 const getCommandPDF = async (req, res) => {
     const { id_commande } = req.params;
 
@@ -159,4 +165,4 @@ const getCommandPDF = async (req, res) => {
     }
 };
 
-module.exports = { index, show, store, update, destroy, getCommandPDF };
+module.exports = { index, show, store, update, destroy, allCommande, getCommandPDF };

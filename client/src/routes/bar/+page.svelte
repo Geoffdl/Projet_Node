@@ -98,13 +98,20 @@
 	let showModal = $state(false);
 </script>
 
-<Button title="+ Ajouter" onclick={handleAddClick} />
 
-<TableDataBar
-	bind:this={barTable}
-	onEditClick={handleEditClick}
-	onDeleteClick={handleDeleteClick}
-/>
+<div class={styles.container}>
+	<div class={styles.button}>
+		<Button title="+ Ajouter" onclick={handleAddClick} />
+	</div>
+
+	<div class={styles.table}>
+		<TableDataBar
+		bind:this={barTable}
+		onEditClick={handleEditClick}
+		onDeleteClick={handleDeleteClick}
+	/>
+	</div>
+</div>
 
 <ModalBar
 	bind:showModal

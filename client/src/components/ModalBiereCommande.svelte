@@ -222,7 +222,7 @@
 				{/if}
 
 				<div class={styles.formActions}>
-					<Button type="button" title="Annuler" onclick={() => dialog?.close()} />
+					<Button title="Annuler" onclick={() => dialog?.close()} />
 
 					<Button title={mode === 'add' ? 'Ajouter' : 'Modifier'}/>
 				</div>
