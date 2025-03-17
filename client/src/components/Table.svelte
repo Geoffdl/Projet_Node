@@ -13,7 +13,7 @@
 	const styles = {
 		container: 'overflow-x-auto bg-white shadow-md sm:rounded-lg',
 		title: 'p-4 text-xl font-semibold text-gray-800',
-		table: 'w-full text-left text-sm text-gray-500',
+		table: ' w-full text-left text-sm text-gray-500 ',
 		thead: 'bg-gray-50 text-xs uppercase text-gray-700',
 		th: 'px-6 py-3 bg-[#54A56A] text-stone-50',
 		tr: 'border-b bg-white hover:bg-gray-50',
@@ -22,9 +22,13 @@
 	} as const;
 
 	// Props with type safety
-	export let data: any[];
-	export let columns: any[];
-	export let title: string;
+	let { data, columns, title, onEditClick, onDeleteClick } = $props<{
+		data: any[];
+		columns: any[];
+		title: string;
+		onEditClick?: (row: any) => void;
+		onDeleteClick?: (row: any) => void;
+	}>();
 </script>
 
 <div class={styles.container}>
@@ -48,7 +52,8 @@
 					{#each columns as column}
 						<td class={styles.td}>
 							{#if column.component}
-								<svelte:component this={column.component} {row} />
+								{@const Component = column.component}
+								<Component {row} {onEditClick} {onDeleteClick} />
 							{:else}
 								{row[column.key]}
 							{/if}

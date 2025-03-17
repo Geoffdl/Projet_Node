@@ -3,9 +3,7 @@
 	import TableDataCommande from '../../../components/TableDataCommande.svelte';
 	import TableDataBiereWithoutBarInfo from '../../../components/TableDataBiereWithoutBarInfo.svelte';
 	import Button from '../../../components/Button.svelte';
-	import type { ComponentType, SvelteComponent } from 'svelte';
-
-	import ModalAddBiere from '../../../components/ModalAddBiere.svelte';
+	import TestingModal from '../../../components/testing/TestingModal.svelte';
 
 	const id = $page.params.id;
 
@@ -18,47 +16,193 @@
 	};
 
 	let activeTab = $state('biere');
+
+	let showModal = $state(false);
+
+	let currentItem = $state(null);
+
+	let mode = $state<'add' | 'edit' | 'delete'>('add');
+
 	const toggleTab = (tab: string) => {
 		activeTab = tab;
 	};
-	let showModal = $state(false);
+	function handleFormSubmit(formData: any, tableType: string, mode: string, id?: number) {
+		console.log('Form submitted:', formData, 'for table:', tableType, 'mode:', mode, 'id:', id);
 
-	// Reference to the table component with proper typing
+		const barId = $page.params.id;
+
+		if (tableType === 'biere') {
+			if (mode === 'add') {
+				fetch(`http://localhost:3001/bars/${barId}/biere`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(formData)
+				})
+					.then((response) => {
+						if (!response.ok) throw new Error('Failed to add beer');
+						return response.json();
+					})
+					.then((data) => {
+						console.log('Beer added:', data);
+						if (biereTable) {
+							biereTable.fetchBieres();
+						}
+					})
+					.catch((error) => {
+						console.error('Error adding beer:', error);
+					});
+			} else if (mode === 'edit' && id) {
+				fetch(`http://localhost:3001/biere/${id}`, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(formData)
+				})
+					.then((response) => {
+						if (!response.ok) throw new Error('Failed to update beer');
+						return response.json();
+					})
+					.then((data) => {
+						console.log('Beer updated:', data);
+						if (biereTable) {
+							biereTable.fetchBieres();
+						}
+					})
+					.catch((error) => {
+						console.error('Error updating beer:', error);
+					});
+			} else if (mode === 'delete' && id) {
+				fetch(`http://localhost:3001/biere/${id}`, {
+					method: 'DELETE',
+					headers: { 'Content-Type': 'application/json' }
+				})
+					.then((response) => {
+						if (!response.ok) throw new Error('Failed to delete beer');
+						return response.json();
+					})
+					.then((data) => {
+						if (biereTable) biereTable.fetchBieres();
+					});
+			}
+		} else if (tableType === 'commande') {
+			if (mode === 'add') {
+				fetch(`http://localhost:3001/bars/${barId}/commandes`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(formData)
+				})
+					.then((response) => {
+						if (!response.ok) throw new Error('Failed to add command');
+						return response.json();
+					})
+					.then((data) => {
+						console.log('Command added:', data);
+						if (commandeTable) {
+							commandeTable.fetchCommandes();
+						}
+					})
+					.catch((error) => {
+						console.error('Error adding command:', error);
+					});
+			} else if (mode === 'edit' && id) {
+				fetch(`http://localhost:3001/commandes/${id}`, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(formData)
+				})
+					.then((response) => {
+						if (!response.ok) throw new Error('Failed to update command');
+						return response.json();
+					})
+					.then((data) => {
+						console.log('Command updated:', data);
+						if (commandeTable) {
+							commandeTable.fetchCommandes();
+						}
+					})
+					.catch((error) => {
+						console.error('Error updating command:', error);
+					});
+			}
+		}
+	}
+
 	let biereTable: { fetchBieres: () => Promise<void> };
+	let commandeTable: { fetchCommandes: () => Promise<void> };
 
-	// Handle the biereAdded event
 	function handleBiereAdded() {
-		// Refresh the table data
 		if (biereTable) {
 			biereTable.fetchBieres();
 		}
 	}
+
+	function handleCommandeAdded() {
+		if (commandeTable) {
+			commandeTable.fetchCommandes();
+		}
+	}
+
+	function handleAddClick() {
+		currentItem = null;
+		mode = 'add';
+		showModal = true;
+	}
+
+	function handleEditClick(item: any) {
+		currentItem = item;
+		mode = 'edit';
+		showModal = true;
+		console.log('Edit clicked for item:', item, id, mode);
+	}
+
+	function handleDeleteClick(item: any) {
+		currentItem = item;
+		showModal = true;
+		mode = 'delete';
+		console.log('Delete clicked for item:', item);
+	}
 </script>
 
 <div class={styles.container}>
-	<h1>Bar à l'ID {id}</h1>
-
 	<div class={styles.buttonList}>
 		<div class={styles.switch}>
 			<Button title="Bières" onclick={() => toggleTab('biere')} />
 			<Button title="Commandes" onclick={() => toggleTab('commande')} />
 		</div>
 		<div class={styles.buttonAdd}>
-			<Button title="+ Ajouter" onclick={() => (showModal = true)} />
+			<Button title="+ Ajouter" onclick={handleAddClick} />
 		</div>
 	</div>
 
 	<div id="commande" class={styles.tab} hidden={activeTab !== 'commande'}>
-		<TableDataCommande />
+		<TableDataCommande
+			bind:this={commandeTable}
+			onEditClick={handleEditClick}
+			onDeleteClick={handleDeleteClick}
+		/>
 	</div>
 	<div id="biere" class={styles.tab} hidden={activeTab !== 'biere'}>
-		<TableDataBiereWithoutBarInfo bind:this={biereTable} />
+		<TableDataBiereWithoutBarInfo
+			bind:this={biereTable}
+			onEditClick={handleEditClick}
+			onDeleteClick={handleDeleteClick}
+		/>
 	</div>
 </div>
 
-<ModalAddBiere
+<TestingModal
 	bind:showModal
-	header={() => 'Ajouter une bière'}
-	barId={id}
-	on:biereAdded={handleBiereAdded}
+	header={() =>
+		`${mode === 'add' ? 'Ajouter' : mode === 'edit' ? 'Modifier' : 'Supprimer'} ${activeTab === 'biere' ? 'une bière' : 'une commande'}`}
+	tableType={activeTab}
+	{mode}
+	{currentItem}
+	onSubmit={handleFormSubmit}
 />
