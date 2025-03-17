@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '../Button.svelte';
+	import Button from './Button.svelte';
 
 	let {
 		showModal = $bindable(false),
@@ -222,7 +222,7 @@
 				{/if}
 
 				<div class={styles.formActions}>
-					<Button title="Annuler" onclick={() => dialog?.close()} />
+					<Button type="button" title="Annuler" onclick={() => dialog?.close()} />
 
 					<Button title={mode === 'add' ? 'Ajouter' : 'Modifier'}/>
 				</div>

@@ -1,76 +1,116 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import Table from '../../components/Table.svelte';
-	
-	import ActionCell from '../../components/TableActionCell.svelte';
+	import TableDataBar from '../../components/TableDataBar.svelte';
 	import Button from '../../components/Button.svelte';
-	import Modal from '../../components/Modal.svelte';
+	import ModalBar from '../../components/ModalBar.svelte';
 
+	let barTable: { fetchBars: () => Promise<void> };
 
-	interface Bar {
-		nom: string;
-		adresse: string;
-		tel: string;
-		email: string;
-		description: string;
+	let currentItem = $state(null);
+	let mode = $state<'add' | 'edit' | 'delete'>('add');
+
+	function handleAddClick() {
+		currentItem = null;
+		mode = 'add';
+		showModal = true;
 	}
 
-	let bars = $state<Bar[]>([]);
+	function handleEditClick(item: any) {
+		currentItem = item;
+		mode = 'edit';
+		showModal = true;
+		console.log('Edit clicked for item:', item);
+	}
 
-	const columns = [
-		{ key: 'nom', label: 'Name' },
-		{ key: 'adresse', label: 'Address' },
-		{ key: 'tel', label: 'Phone' },
-		{ key: 'email', label: 'Email' },
-		{ key: 'description', label: 'Description' },
-		{
-			key: 'actions',
-			label: 'Actions',
-			component: ActionCell
+	function handleDeleteClick(item: any) {
+		currentItem = item;
+		showModal = true;
+		mode = 'delete';
+		console.log('Delete clicked for item:', item);
+	}
+
+	function handleFormSubmit(formData: any, tableType: string, mode: string, id?: number) {
+		console.log('Form submitted:', formData, 'for table:', tableType, 'mode:', mode, 'id:', id);
+
+		if (mode === 'add') {
+			fetch(`Http://localhost:3001/bars`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(formData)
+			})
+				.then((response) => {
+					if (!response.ok) throw new Error('Failed to add bar');
+					return response.json();
+				})
+				.then((data) => {
+					console.log('Bar added:', data);
+					barTable.fetchBars();
+				})
+				.catch((error) => {
+					console.error('Error adding bar:', error);
+				});
+		} else if (mode === 'edit') {
+			fetch(`Http://localhost:3001/bars/${id}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(formData)
+			})
+				.then((response) => {
+					if (!response.ok) throw new Error('Failed to update bar');
+					return response.json();
+				})
+				.then((data) => {
+					console.log('Bar added:', data);
+					barTable.fetchBars();
+				})
+				.catch((error) => {
+					console.error('Error updating bar:', error);
+				});
+		} else if (mode === 'delete') {
+			fetch(`Http://localhost:3001/bars/${id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(formData)
+			})
+				.then((response) => {
+					if (!response.ok) throw new Error('Failed to delete bar');
+					return response.json();
+				})
+				.then((data) => {
+					console.log('Bar added:', data);
+					barTable.fetchBars();
+				})
+				.catch((error) => {
+					console.error('Error deleting bar:', error);
+				});
 		}
-	];
-
-	const fetchBars = async () => {
-		try {
-			const response = await fetch('http://localhost:3001/bars');
-			if (!response.ok) throw new Error('Failed to fetch bars');
-			const data = await response.json();
-
-			bars = data.map((bar: Bar) => ({
-				...bar
-			}));
-		} catch (error) {
-			console.error('Error fetching bars:', error);
-		}
-	};
-	onMount(() => {
-		fetchBars();
-	});
-
+	}
 	const styles = {
-		container : 'container mx-auto',
+		container: 'container mx-auto',
 		button: 'pr-4 flex flex-row-reverse',
 		table: 'p-4'
-	}
-
+	};
 	let showModal = $state(false);
 </script>
 
-<div class={styles.container}>
-	<div class={styles.button}>
-		<Button title="+ Ajouter" onclick={() => (showModal = true)}/>
-	</div>
-	
-	<div class={styles.table}>
-		<Table data={bars} {columns} title="Liste des Bars" />
-	</div>
-</div>
-<br />
+<Button title="+ Ajouter" onclick={handleAddClick} />
 
-<Modal bind:showModal>
-	{#snippet header()}
-		<h2>
-			Ajouter un bar
-		</h2>
-	{/snippet}
-</Modal>
+<TableDataBar
+	bind:this={barTable}
+	onEditClick={handleEditClick}
+	onDeleteClick={handleDeleteClick}
+/>
+
+<ModalBar
+	bind:showModal
+	header={() =>
+		mode === 'add' ? 'Ajouter un bar' : mode === 'edit' ? 'Modifier un bar' : 'Supprimer un bar'}
+	{currentItem}
+	{mode}
+	onSubmit={handleFormSubmit}
+/>
