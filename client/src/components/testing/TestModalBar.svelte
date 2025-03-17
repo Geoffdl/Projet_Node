@@ -4,7 +4,7 @@
 	let {
 		showModal = $bindable(false),
 		header,
-		tableType = 'biere',
+		tableType = 'bar',
 		onSubmit,
 		mode = 'add',
 		currentItem = null
@@ -19,56 +19,35 @@
 
 	let dialog = $state<HTMLDialogElement | null>(null);
 
-	type BiereFormData = {
+	type BarFormData = {
 		nom: string;
-		degree: string;
-		prix: string;
+		adresse: string;
+		tel: string;
+		email: string;
+		description: string;
 	};
 
-	type CommandeFormData = {
-		nom: string;
-		prix: string;
-		date: string;
-		status: string;
-	};
-
-	type FormData = BiereFormData | CommandeFormData;
+	type FormData = BarFormData;
 
 	let formData = $state<FormData>({} as FormData);
 
 	$effect(() => {
 		if (mode === 'add') {
-			if (tableType === 'biere') {
-				formData = {
-					nom: '',
-					degree: '',
-					prix: ''
-				} as BiereFormData;
-			} else if (tableType === 'commande') {
-				formData = {
-					nom: '',
-					prix: '',
-					date: new Date().toISOString().split('T')[0],
-					status: 'brouillon'
-				} as CommandeFormData;
-			}
+			formData = {
+				nom: '',
+				adresse: '',
+				tel: '',
+				email: '',
+				description: ''
+			} as BarFormData;
 		} else if (mode === 'edit' && currentItem) {
-			if (tableType === 'biere') {
-				formData = {
-					nom: currentItem.nom || '',
-					degree: currentItem.degree?.toString() || '',
-					prix: currentItem.prix?.toString() || ''
-				} as BiereFormData;
-			} else if (tableType === 'commande') {
-				const [day, month, year] = currentItem.date.split('/');
-				const formattedDate = `${year}-${month}-${day}`;
-				formData = {
-					nom: currentItem.nom || '',
-					prix: currentItem.prix?.toString() || '',
-					date: formattedDate,
-					status: currentItem.status || 'brouillon'
-				} as CommandeFormData;
-			}
+			formData = {
+				nom: currentItem.nom || '',
+				adresse: currentItem.adresse || '',
+				tel: currentItem.tel?.toString() || '',
+				email: currentItem.email.toString() || '',
+				description: currentItem.description || ''
+			} as BarFormData;
 		}
 	});
 
@@ -113,7 +92,9 @@
 	}}
 >
 	<div class={styles.content}>
-		{@render header?.()}
+		{#if header}
+			{header()}
+		{/if}
 
 		{#if mode === 'delete'}
 			<div class="p-4 text-center">
@@ -131,7 +112,7 @@
 			</div>
 		{:else}
 			<form onsubmit={handleSubmit}>
-				{#if tableType === 'biere'}
+				{#if tableType === 'bar'}
 					<div class={styles.formChild}>
 						<label for="nom">Nom</label>
 						<input
@@ -144,80 +125,46 @@
 						/>
 					</div>
 					<div class={styles.formChild}>
-						<label for="degree">Degré</label>
-						<input
-							type="number"
-							id="degree"
-							class={styles.formInput}
-							value={'degree' in formData ? formData.degree : ''}
-							oninput={(e) => handleInputChange('degree', (e.target as HTMLInputElement).value)}
-							required
-							step="0.1"
-							min="0"
-						/>
-					</div>
-					<div class={styles.formChild}>
-						<label for="prix">Prix</label>
-						<input
-							type="number"
-							id="prix"
-							class={styles.formInput}
-							value={formData.prix}
-							oninput={(e) => handleInputChange('prix', (e.target as HTMLInputElement).value)}
-							required
-							step="0.01"
-							min="0"
-						/>
-					</div>
-				{:else if tableType === 'commande'}
-					<div class={styles.formChild}>
-						<label for="nom">Nom</label>
+						<label for="adresse">Adresse</label>
 						<input
 							type="text"
-							id="nom"
+							id="adresse"
 							class={styles.formInput}
-							value={formData.nom}
-							oninput={(e) => handleInputChange('nom', (e.target as HTMLInputElement).value)}
+							value={'adresse' in formData ? formData.adresse : ''}
+							oninput={(e) => handleInputChange('adresse', (e.target as HTMLInputElement).value)}
 							required
 						/>
 					</div>
 					<div class={styles.formChild}>
-						<label for="prix">Prix</label>
+						<label for="tel">Telephone</label>
 						<input
 							type="number"
-							id="prix"
+							id="tel"
 							class={styles.formInput}
-							value={formData.prix}
-							oninput={(e) => handleInputChange('prix', (e.target as HTMLInputElement).value)}
-							required
-							step="0.01"
-							min="0"
+							value={formData.tel}
+							oninput={(e) => handleInputChange('tel', (e.target as HTMLInputElement).value)}
 						/>
 					</div>
 					<div class={styles.formChild}>
-						<label for="date">Date</label>
+						<label for="email">Email</label>
 						<input
-							type="date"
-							id="date"
+							type="email"
+							id="email"
 							class={styles.formInput}
-							value={'date' in formData ? formData.date : ''}
-							oninput={(e) => handleInputChange('date', (e.target as HTMLInputElement).value)}
-							required
+							value={'email' in formData ? formData.email : ''}
+							oninput={(e) => handleInputChange('email', (e.target as HTMLInputElement).value)}
 						/>
 					</div>
 					<div class={styles.formChild}>
-						<label for="status">Status</label>
-						<select
-							id="status"
+						<label for="description">description</label>
+						<input
+							type="description"
+							id="description"
 							class={styles.formInput}
-							value={'status' in formData ? formData.status : ''}
-							onchange={(e) => handleInputChange('status', (e.target as HTMLSelectElement).value)}
-							required
-						>
-							<option value="brouillon">brouillon</option>
-							<option value="en cours">en cours</option>
-							<option value="terminée">terminée</option>
-						</select>
+							value={'description' in formData ? formData.description : ''}
+							oninput={(e) =>
+								handleInputChange('description', (e.target as HTMLInputElement).value)}
+						/>
 					</div>
 				{/if}
 
