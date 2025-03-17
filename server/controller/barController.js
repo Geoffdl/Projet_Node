@@ -47,7 +47,8 @@ const create = async (req, res) => {
 
         res.status(200).json(bar);
     } catch (error) {
-        res.status(400).json({ error: "ça marche pas" });
+        console.error("Actual error:", error);
+        res.status(400).json({ error: "Erreur dans la création du bar", details: error.message });
     }
 };
 

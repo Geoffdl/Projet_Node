@@ -3,38 +3,39 @@ const app = require(`../index`);
 const db = require("../config/db");
 
 const testDataBar = {
-    nom: "Bob",
-    adresse: "03 rue des tomates",
-    tel: "0305090310",
-    email: "test@test.com",
-    description: "Test Description",
+    "nom": "Bobs",
+    "adresse": "45 rue des arc-en-ciel",
+    "email": "madame@gmail.com",
+    "tel": "01 23 45 67 89",
+    "description": "Un bar chaleureux",
 };
-
-// beforeAll(async () => {
-//     await db.sync({ force: true });
-
-//     await request(app).post("/bars").send(testDataBar).expect(200);
-// });
 
 beforeAll(async () => {
     try {
         await db.authenticate();
-        await db.sync({ force: true });
+
         const response = await request(app).post("/bars").send(testDataBar);
-        console.log("Setup response:", response.body); // This will help debug
+        if (!response.ok) {
+            console.log("Test data creation response:", response.body);
+        }
     } catch (error) {
-        console.error("Setup error:", error);
+        console.error("Test setup error:", error);
         throw error;
     }
 });
-//beforeEach
-//afterEach
 
 afterAll(async () => {
     try {
+        const response = await request(app).get("/bars");
+        for (const bar of response.body) {
+            if (bar.nom === "Bobs" || bar.nom === "Test Bar" || bar.nom === "Updated Bob") {
+                await request(app).delete(`/bars/${bar.id}`);
+            }
+        }
         await db.close();
     } catch (error) {
-        console.error("Error closing database:", error);
+        console.error("Database cleanup error:", error);
+        throw error;
     }
 });
 
@@ -43,7 +44,6 @@ describe("Bar Controller", () => {
         const response = await request(app).get("/bars");
         expect(response.statusCode).toBe(200);
         expect(response.body).toBeInstanceOf(Array);
-        expect(response.body[0].nom).toBe("Bob");
     });
 
     it("should get one bar", async () => {
@@ -52,21 +52,34 @@ describe("Bar Controller", () => {
         expect(response.body).toBeInstanceOf(Object);
     });
 
-    // it("should create a bar", async () => {
-    //     const response = await request(app).post("/bars");
-    //     expect(response.statusCode).toBe(200);
-    //     expect(response.body).toBeInstanceOf(Array);
-    // });
+    it("should create a bar", async () => {
+        const newBar = {
+            nom: "Test Bar",
+            adresse: "123 Test Street",
+            tel: "0102030405",
+            email: "test.bar@test.com",
+            description: "A test bar",
+        };
+        const response = await request(app).post("/bars").send(newBar);
+        expect(response.statusCode).toBe(200);
+        expect(response.body.nom).toBe(newBar.nom);
+    });
 
-    // it("should update a bar", async () => {
-    //     const response = await request(app).put("/bars/1");
-    //     expect(response.statusCode).toBe(200);
-    //     expect(response.body).toBeInstanceOf(Array);
-    // });
+    it("should update a bar", async () => {
+        const updatedData = {
+            nom: "Updated Bob",
+            description: "Updated Description",
+        };
+        const response = await request(app).put("/bars/1").send(updatedData);
+        expect(response.statusCode).toBe(200);
+        expect(response.body.nom).toBe(updatedData.nom);
+    });
 
-    // it("should delete a bar", async () => {
-    //     const response = await request(app).delete("/bars/1");
-    //     expect(response.statusCode).toBe(200);
-    //     expect(response.body).toBeInstanceOf(Array);
-    // });
+    it("should delete a bar", async () => {
+        const response = await request(app).delete("/bars/1");
+        expect(response.statusCode).toBe(200);
+
+        const getResponse = await request(app).get("/bars/1");
+        expect(getResponse.statusCode).toBe(404);
+    });
 });
