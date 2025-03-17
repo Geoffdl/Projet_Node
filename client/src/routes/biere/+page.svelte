@@ -27,7 +27,7 @@
 
 	const fetchBieres = async () => {
 		try {
-			const response = await fetch('http://localhost:3001/bars/1/biere');
+			const response = await fetch('http://localhost:3001/biere');
 			if (!response.ok) throw new Error('Failed to fetch biere');
 			const data = await response.json();
 

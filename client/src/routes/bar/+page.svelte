@@ -1,4 +1,3 @@
-<script lang="ts">
 	import TableDataBar from '../../components/TableDataBar.svelte';
 	import Button from '../../components/Button.svelte';
 	import ModalBar from '../../components/ModalBar.svelte';
@@ -92,6 +91,12 @@
 				});
 		}
 	}
+		const styles = {
+		container : 'container mx-auto',
+		button: 'pr-4 flex flex-row-reverse',
+		table: 'p-4'
+	}
+	let showModal = $state(false);
 </script>
 
 <Button title="+ Ajouter" onclick={handleAddClick} />

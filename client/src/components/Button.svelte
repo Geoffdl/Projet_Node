@@ -1,13 +1,16 @@
 <script lang="ts">
 	export let title = '';
 	export let onclick = () => {};
-	export let type: 'button' | 'submit' | 'reset' = 'button';
-	let buttonColor =
-		title === '+ Ajouter' || 'Valider' || 'Annuler' || 'Manager ce bar' || 'Bières' || 'Commandes'
-			? 'bg-[#EAD982] hover:bg-[#B1A879]'
-			: title === 'Supprimer'
-				? 'bg-[#E43347] hover: bg-[#99333F]'
-				: 'bg-stone-50 hover: bg-stone-150';
+
+	let buttonColor = ['+ Ajouter', 'Annuler', 'Manager ce bar', 'Bières', 'Commandes'].includes(
+		title
+	)
+		? 'bg-[#EAD982] hover:bg-[#B1A879]'
+		: ['Ajouter', 'Modifier'].includes(title)
+			? 'bg-[#54A56A] hover:bg-[#4D7C5A]'
+			: 'bg-stone-50 hover: bg-stone-150';
+
+	let buttonType: 'button' | 'submit' | 'reset' = title === 'Annuler' ? 'button' : 'submit';
 
 	// Button style
 	const styles = {
@@ -15,4 +18,4 @@
 	};
 </script>
 
-<button {type} class={styles.button} on:click={onclick}>{title}</button>
+<button type={buttonType} class={styles.button} on:click={onclick}>{title}</button>
