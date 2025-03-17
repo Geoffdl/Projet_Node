@@ -16,13 +16,7 @@
 		{ key: 'nom', label: 'Nom' },
 		{ key: 'degree', label: 'degré' },
 		{ key: 'prix', label: 'Prix' },
-		{ key: 'barId', label: 'barId' },
-
-		{
-			key: 'actions',
-			label: 'Actions',
-			component: ActionCell
-		}
+		{ key: 'barId', label: 'barId' }
 	];
 
 	const fetchBieres = async () => {
