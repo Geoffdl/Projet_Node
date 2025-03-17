@@ -1,10 +1,9 @@
+<script lang="ts">
 	import TableDataBar from '../../components/TableDataBar.svelte';
 	import Button from '../../components/Button.svelte';
 	import ModalBar from '../../components/ModalBar.svelte';
 
 	let barTable: { fetchBars: () => Promise<void> };
-
-	let showModal = $state(false);
 
 	let currentItem = $state(null);
 	let mode = $state<'add' | 'edit' | 'delete'>('add');
@@ -91,11 +90,11 @@
 				});
 		}
 	}
-		const styles = {
-		container : 'container mx-auto',
+	const styles = {
+		container: 'container mx-auto',
 		button: 'pr-4 flex flex-row-reverse',
 		table: 'p-4'
-	}
+	};
 	let showModal = $state(false);
 </script>
 
