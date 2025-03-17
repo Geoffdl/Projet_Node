@@ -28,7 +28,7 @@
 
 	const fetchCommandes = async () => {
 		try {
-			const response = await fetch('http://localhost:3001/bars/1/commandes');
+			const response = await fetch('http://localhost:3001/commandes');
 			if (!response.ok) throw new Error('Failed to fetch commandes');
 			const data = await response.json();
 
